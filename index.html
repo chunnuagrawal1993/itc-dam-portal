@@ -95,9 +95,23 @@
   .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
   .card-title { font-size: 16px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
 
-  .upload-area { border: 2px dashed #00336640; border-radius: 8px; padding: 28px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
+  /* Ingestion Controls */
+  .ingestion-config-bar {
+    display: flex;
+    gap: 16px;
+    background: #f1f5f9;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .config-label { font-weight: 600; font-size: 12px; color: var(--primary); }
+
+  .upload-area { border: 2px dashed #00336650; border-radius: 8px; padding: 32px 20px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
   .upload-area:hover { border-color: var(--primary); background: #f0f4f8; }
-  .upload-icon { font-size: 32px; color: var(--primary); margin-bottom: 8px; }
+  .upload-area.dragover { border-color: var(--accent); background: #fefce8; }
+  .upload-icon { font-size: 38px; color: var(--primary); margin-bottom: 8px; }
   .preset-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
   .preset-brand-logo { width: 22px; height: 22px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
   
@@ -112,11 +126,11 @@
   .progress-bar-container { background: #cbd5e1; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0; }
   .progress-bar { background: var(--primary); height: 100%; width: 0%; transition: width 0.3s; }
   
-  .ai-results-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; margin-top: 20px; display: none; }
+  .ai-results-grid { display: grid; grid-template-columns: 320px 1fr; gap: 20px; margin-top: 20px; display: none; }
   .asset-preview-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #fafafa; }
-  .asset-preview-media { width: 100%; height: 200px; object-fit: cover; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; position: relative; }
-  .asset-preview-logo { max-width: 78%; max-height: 70%; object-fit: contain; }
-  .format-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+  .asset-preview-media { width: 100%; height: 220px; object-fit: contain; background: #0f172a; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; position: relative; }
+  .asset-preview-media img, .asset-preview-media video { width: 100%; height: 100%; object-fit: contain; }
+  .format-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.75); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
 
   .tag-group { margin-bottom: 12px; }
   .tag-group-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
@@ -127,7 +141,7 @@
 
   /* Creative Compliance Report */
   .cqs-report-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
-  .cqs-header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 14px; margin-bottom: 16px; }
+  .cqs-header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
   .cqs-score-pill { padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
   .cqs-excellent { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
   .cqs-needs-work { background: #fef9c3; color: #a16207; border: 1px solid #fde047; }
@@ -141,10 +155,11 @@
   .search-input { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
   .select-filter { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; font-size: 13px; }
 
-  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
   .gallery-card { border: 1px solid var(--border); border-radius: 8px; background: white; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
   .gallery-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-  .gallery-thumb { width: 100%; height: 140px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); display: flex; align-items: center; justify-content: center; font-size: 32px; color: #64748b; position: relative; padding: 18px; }
+  .gallery-thumb { width: 100%; height: 150px; background: #0f172a; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #64748b; position: relative; overflow: hidden; }
+  .gallery-thumb img, .gallery-thumb video { width: 100%; height: 100%; object-fit: contain; }
   .brand-logo { width: 78%; height: 82%; object-fit: contain; }
   .gallery-info { padding: 12px; }
   .gallery-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -158,7 +173,7 @@
 
   .modal-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
   .modal-overlay.active { display: flex; }
-  .modal-box { background: white; border-radius: 8px; width: 950px; max-width: 95vw; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 320px 1fr; border: 1px solid var(--border); }
+  .modal-box { background: white; border-radius: 8px; width: 950px; max-width: 95vw; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 340px 1fr; border: 1px solid var(--border); }
   .modal-left { background: #f8fafc; padding: 20px; border-right: 1px solid var(--border); }
   .modal-right { padding: 24px; }
   .form-group { margin-bottom: 12px; }
@@ -182,7 +197,7 @@
     </div>
 
     <div class="login-title">ITC Foods DAM Portal</div>
-    <div class="login-subtitle">Digital Asset Management & Compliance Platform</div>
+    <div class="login-subtitle">Enterprise Digital Asset & Compliance Platform</div>
 
     <div class="login-error" id="login-error">Please enter valid credentials.</div>
 
@@ -201,7 +216,7 @@
     <div class="demo-creds">
       <strong>Demo Credentials:</strong><br>
       Username: <code>admin</code> | Password: <code>itcfoods2026</code><br>
-      <em>(Accepts any corporate credentials)</em>
+      <em>(Accepts any corporate email / credentials)</em>
     </div>
   </div>
 </div>
@@ -224,29 +239,54 @@
   </header>
 
   <nav class="main-nav">
-    <div class="nav-tab active" onclick="switchTab('tab-upload', event)">1. Ingestion & Creative Quality Agent</div>
+    <div class="nav-tab active" onclick="switchTab('tab-upload', event)">1. Ingest & Live Asset Compliance Audit</div>
     <div class="nav-tab" onclick="switchTab('tab-gallery', event)">2. Asset Library & Governance</div>
     <div class="nav-tab" onclick="switchTab('tab-taxonomy', event)">3. Brand Hierarchy</div>
   </nav>
 
   <div class="container">
-    <!-- TAB 1: UPLOAD & CQS ADJUDICATION -->
+    <!-- TAB 1: REAL UPLOAD & CQS ADJUDICATION -->
     <div id="tab-upload" class="tab-content active">
       <div class="card">
         <div class="card-header">
-          <div class="card-title">Media Ingestion & Adjudication Framework Pipeline</div>
-          <span style="font-size: 12px; color: var(--text-muted);">Enforces YouTube ABCD & Meta Brilliant Basics Rulebooks</span>
+          <div class="card-title">Live Creative Ingestion & Adjudication Framework Pipeline</div>
+          <span style="font-size: 12px; color: var(--text-muted);">Supports MP4, MOV, JPG, PNG, GIF, PDF</span>
         </div>
 
-        <div class="upload-area" id="drop-zone" onclick="triggerPreset('sunfeast')">
-          <div class="upload-icon">⚡</div>
-          <h3>Simulate Asset Audit & Creative Quality Scoring</h3>
-          <p style="color: var(--text-muted); margin-top: 4px;">Click any sample digital campaign creative below to execute real-time CQS audit:</p>
+        <!-- Ingestion Target Channel Selector -->
+        <div class="ingestion-config-bar">
+          <span class="config-label">Target Audit Placement:</span>
+          <select class="select-filter" id="ingest-platform" style="padding: 6px 12px; font-weight: 500;">
+            <option value="YT_ABCD">YouTube / DV360 (ABCD Framework Non-Bumper)</option>
+            <option value="YT_BUMPER">YouTube / Bumper (ABCD 6s Framework)</option>
+            <option value="META_VIDEO">Meta (Instagram Reels / Stories Video)</option>
+            <option value="META_STATIC">Meta (Facebook / Instagram Feed Static)</option>
+          </select>
 
+          <span class="config-label" style="margin-left: 12px;">Assigned Brand:</span>
+          <select class="select-filter" id="ingest-brand" style="padding: 6px 12px;">
+            <option value="Aashirvaad">Aashirvaad</option>
+            <option value="Sunfeast Dark Fantasy">Sunfeast Dark Fantasy</option>
+            <option value="Sunfeast YiPPee!">Sunfeast YiPPee!</option>
+            <option value="Bingo!">Bingo!</option>
+            <option value="Fabelle">Fabelle</option>
+            <option value="B Natural">B Natural</option>
+          </select>
+        </div>
+
+        <!-- Actual File Input -->
+        <input type="file" id="real-file-input" style="display: none;" accept="image/*,video/*,application/pdf" onchange="handleRealFileUpload(event)">
+
+        <div class="upload-area" id="drop-zone" onclick="document.getElementById('real-file-input').click()">
+          <div class="upload-icon">📁</div>
+          <h3>Click to Browse or Drag & Drop Your Actual Asset Files Here</h3>
+          <p style="color: var(--text-muted); margin-top: 4px;">Upload any real image, video MP4, or campaign creative from your system</p>
+
+          <div style="margin-top: 18px; font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.5px;">OR TEST INSTANTLY WITH SAMPLE BRAND PRESETS:</div>
           <div class="preset-buttons">
-            <button class="btn" onclick="event.stopPropagation(); triggerPreset('sunfeast')"><img class="preset-brand-logo" alt="" src="https://seeklogo.com/images/S/sunfeast-dark-fantasy-logo-6A34432B80-seeklogo.com.png">Dark Fantasy Video (YouTube Bumper)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('sunfeast')"><img class="preset-brand-logo" alt="" src="https://seeklogo.com/images/S/sunfeast-dark-fantasy-logo-6A34432B80-seeklogo.com.png">Dark Fantasy Video (YouTube)</button>
             <button class="btn" onclick="event.stopPropagation(); triggerPreset('bingo')"><img class="preset-brand-logo" alt="" src="https://media.potatopro.com/bingo-1600x785.jpg">Bingo! Video (Instagram Reel - Needs Work)</button>
-            <button class="btn" onclick="event.stopPropagation(); triggerPreset('aashirvaad')"><img class="preset-brand-logo" alt="" src="https://pimwp.s3-accelerate.amazonaws.com/2021/08/Aashirwad-logo.png">Aashirvaad Static (Facebook Feed - Passed)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('aashirvaad')"><img class="preset-brand-logo" alt="" src="https://pimwp.s3-accelerate.amazonaws.com/2021/08/Aashirwad-logo.png">Aashirvaad Static (Facebook Feed)</button>
             <button class="btn" onclick="event.stopPropagation(); triggerPreset('yippee')"><img class="preset-brand-logo" alt="" src="https://prithvienterprises.co.in/cdn/shop/collections/Yippee.png?v=1750442416">YiPPee! Brand Guide PDF</button>
           </div>
         </div>
@@ -254,32 +294,29 @@
         <!-- Scanning Simulator Progress -->
         <div class="scan-progress-box" id="scan-box">
           <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px;">
-            <span id="scan-status-text">Adjudication AI Agent auditing creative compliance...</span>
+            <span id="scan-status-text">Adjudication AI Agent auditing uploaded creative...</span>
             <span id="scan-percentage">0%</span>
           </div>
           <div class="progress-bar-container">
             <div class="progress-bar" id="progress-bar"></div>
           </div>
-          <div style="font-size: 12px; color: var(--text-muted);" id="scan-step-detail">Evaluating early branding timestamp and aspect ratio...</div>
+          <div style="font-size: 12px; color: var(--text-muted);" id="scan-step-detail">Parsing container metadata, audio tracks, and aspect framing...</div>
         </div>
 
         <!-- AI Auto-Tagging & CQS Results -->
         <div class="ai-results-grid" id="ai-results">
           <div class="asset-preview-card">
-            <div class="asset-preview-media" id="preview-media-box">
-              <span id="preview-icon">🎬</span>
-              <span class="format-badge" id="preview-format">MP4</span>
-            </div>
+            <div class="asset-preview-media" id="preview-media-box"></div>
             <div style="padding: 12px;">
-              <div style="font-weight: 700; font-size: 14px;" id="res-filename">Dark_Fantasy_Choco_Fills_TVC.mp4</div>
-              <div style="font-size: 12px; color: var(--text-muted);" id="res-filesize">145 MB • 1080p HD (00:15)</div>
+              <div style="font-weight: 700; font-size: 14px;" id="res-filename">Uploaded_Creative.mp4</div>
+              <div style="font-size: 12px; color: var(--text-muted);" id="res-filesize">0 MB • 1920x1080</div>
             </div>
           </div>
 
           <div>
-            <div style="background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 6px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+            <div style="background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 6px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
               <div>
-                <strong>Platform Ingestion: <span id="res-platform-tag" style="color: var(--primary);">YouTube Bumper</span></strong>
+                <strong>Audited Target: <span id="res-platform-tag" style="color: var(--primary);">YouTube ABCD</span></strong>
                 <div style="font-size: 12px; color: var(--text-muted);">Threshold benchmark for Go-Live approval is ≥90% CQS.</div>
               </div>
               <button class="btn btn-accent" id="btn-push-library" onclick="saveToLibrary()">Approve & Push to Asset Library</button>
@@ -302,7 +339,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-title">ITC Foods Central Digital Asset Library</div>
-          <div><span style="font-size: 12px; color: var(--text-muted);">Total Assets: <strong id="asset-count">6</strong></span></div>
+          <div><span style="font-size: 12px; color: var(--text-muted);">Total Assets: <strong id="asset-count">3</strong></span></div>
         </div>
 
         <div class="filter-bar">
@@ -345,7 +382,7 @@
 <div class="modal-overlay" id="edit-modal">
   <div class="modal-box">
     <div class="modal-left">
-      <div class="asset-preview-media" id="modal-media-preview" style="height: 160px; border-radius: 6px;"></div>
+      <div class="asset-preview-media" id="modal-media-preview" style="height: 180px; border-radius: 6px;"></div>
       <div style="margin-top: 14px;">
         <h4 id="modal-asset-title">Asset Title</h4>
         <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="modal-asset-id">ID: ITC-DAM-2026-001</div>
@@ -468,6 +505,13 @@
   };
 
   function brandLogoMarkup(item, className = "brand-logo") {
+    if (item.fileDataUrl) {
+      if (item.type === 'Video') {
+        return `<video src="${item.fileDataUrl}" style="width: 100%; height: 100%; object-fit: contain;" controls></video>`;
+      } else if (item.type === 'Image') {
+        return `<img src="${item.fileDataUrl}" style="width: 100%; height: 100%; object-fit: contain;" alt="Asset Preview">`;
+      }
+    }
     const url = brandLogos[item.subBrand] || brandLogos[item.brand] || "";
     return url ? `<img class="${className}" src="${url}" alt="logo">` : item.icon;
   }
@@ -500,7 +544,6 @@
     }
   ];
 
-  // --- INITIAL REPOSITORY ---
   let sampleAssets = [
     {
       id: "ITC-001",
@@ -510,7 +553,7 @@
       type: "Video",
       icon: "🎬",
       format: "MP4",
-      resolution: "1080p H264",
+      resolution: "1920x1080",
       sku: "Choco Fills",
       campaign: "Har Bite Mein Licious",
       status: "Approved",
@@ -535,7 +578,7 @@
       cqs: 70,
       cqsStatus: "NEEDS WORK",
       expiry: "2026-11-15",
-      aiTags: ["Missing Audio Mention", "Fast Cuts", "Square Frame"],
+      aiTags: ["Missing Audio Mention", "Fast Cuts", "Vertical Frame"],
       manualTags: ["Instagram Reel"]
     },
     {
@@ -558,121 +601,173 @@
     }
   ];
 
-  // --- PRESET AUDIT DATASETS FOR SCORING AGENT ---
-  const presetAudits = {
-    sunfeast: {
-      filename: "Dark_Fantasy_Choco_Fills_Bumper.mp4",
-      filesize: "32 MB • 1920x1080 (00:06)",
-      format: "MP4",
-      icon: "🎬",
-      logo: brandLogos["Dark Fantasy"],
-      brand: "Sunfeast",
-      subBrand: "Dark Fantasy",
-      platform: "YouTube / Bumper (ABCD)",
-      formatType: "Video",
-      visualTags: [
-        { label: "Detected Logo at 0.8s", conf: "99.8%" },
-        { label: "Voiceover: 'Sunfeast Dark Fantasy'", conf: "98.2%" },
-        { label: "On-Screen CTA: 'Buy Now'", conf: "96.5%" },
-        { label: "Aspect Ratio: 16:9", conf: "100%" }
-      ],
-      rules: [
-        { name: "Motion", req: "Visual motion in first 1.0s", finding: "Fluid chocolate stream detected at 0.2s", weight: "10%", pass: true },
-        { name: "Pacing", req: "2+ visual cuts in first 5.0s", finding: "3 distinct scenes detected in 4.8s", weight: "10%", pass: true },
-        { name: "Close-Up Face", req: "Close-up face in first 5.0s", finding: "Protagonist close-up at 1.4s", weight: "10%", pass: true },
-        { name: "Early Branding", req: "Logo/Product in first 2.0s (Bumper)", finding: "Dark Fantasy mark at 0.8s", weight: "10%", pass: true },
-        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "Synchronized dynamic supers detected", weight: "10%", pass: true },
-        { name: "Brand Audio Mention", req: "Clear audio mention of brand", finding: "Voiceover audio detected at 3.1s", weight: "10%", pass: true },
-        { name: "Sound On", req: "Audible sound/VO/music detected", finding: "High-clarity stereo track active", weight: "10%", pass: true },
-        { name: "Call to Action (CTA)", req: "On-screen CTA text/graphic", finding: "'Order On ITC Store' overlay at 4.2s", weight: "10%", pass: true },
-        { name: "Optimal Length", req: "Asset length <= 30.1s", finding: "Exact run-time is 6.0s", weight: "10%", pass: true },
-        { name: "Aspect Ratio", req: "16:9 Landscape / 4:5 Mobile", finding: "16:9 (1920x1080)", weight: "10%", pass: true }
-      ],
-      edits: [],
-      escalation: "None required. Asset fully compliant with YouTube ABCD ruleset."
-    },
-    bingo: {
-      filename: "Bingo_TedheMedhe_Instagram_Reel.mp4",
-      filesize: "48 MB • 1080x1920 (00:18)",
-      format: "MP4",
-      icon: "🍟",
-      logo: brandLogos["Bingo!"],
-      brand: "Bingo!",
-      subBrand: "Tedhe Medhe",
-      platform: "Meta / Instagram Reels",
-      formatType: "Video",
-      visualTags: [
-        { label: "Pack Visual at 0.5s", conf: "99.1%" },
-        { label: "Aspect Ratio: 9:16", conf: "100%" },
-        { label: "Missing In-Frame CTA", conf: "95.0%" },
-        { label: "No Subtitles Detected", conf: "97.4%" }
-      ],
-      rules: [
-        { name: "Early Branding", req: "Logo/Product visual in first 2.0s", finding: "Pack visual detected at 0.5s", weight: "20%", pass: true },
-        { name: "Aspect Ratio / Frame", req: "Vertical 9:16 or 4:5 for Reels", finding: "9:16 Vertical (1080x1920)", weight: "20%", pass: true },
-        { name: "Sound On", req: "Audible background track/audio", finding: "Upbeat music audio track active", weight: "10%", pass: true },
-        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "No speech subtitles or supers detected", weight: "10%", pass: false },
-        { name: "Native Platform CTA", req: "CTA configured in ad settings", finding: "Pre-set to 'Shop Now'", weight: "10%", pass: true },
-        { name: "CTA in Creative", req: "Visible CTA text inside video frame", finding: "No closing end-card CTA graphic", weight: "10%", pass: false },
-        { name: "Optimal Length", req: "Reels <= 30.1s", finding: "18.0s runtime", weight: "10%", pass: true },
-        { name: "Simple Message", req: "<= 10 words in first 5.0s", finding: "Clean intro frame (4 words)", weight: "10%", pass: true }
-      ],
-      edits: [
-        { rule: "Optimised for Sound Off", fix: "Add burned-in subtitles or text supers for sound-off mobile feed browsing." },
-        { rule: "CTA in Creative", fix: "Add an explicit on-screen visual CTA banner ('Try Tedhe Medhe Today') in the final 3 seconds." }
-      ],
-      escalation: "Campaign launch blocked. Score is 80% (Threshold: 90%). Creative requires subtitle overlay & CTA end-card before go-live approval."
-    },
-    aashirvaad: {
-      filename: "Aashirvaad_Atta_Facebook_Feed.jpg",
-      filesize: "6.2 MB • 1080x1080",
-      format: "JPG",
-      icon: "🌾",
-      logo: brandLogos["Aashirvaad"],
-      brand: "Aashirvaad",
-      subBrand: "Atta",
-      platform: "Meta / Facebook Feed (Static)",
-      formatType: "Static Image",
-      visualTags: [
-        { label: "Aashirvaad Logo Present", conf: "99.9%" },
-        { label: "1:1 Square Framing", conf: "100%" },
-        { label: "Typography: 7 Words", conf: "98.1%" }
-      ],
-      rules: [
-        { name: "Early Branding", req: "Logo/Product visual anywhere in frame", finding: "Aashirvaad logo and 10kg pack prominent", weight: "33.33%", pass: true },
-        { name: "Aspect Ratio / Frame", req: "1:1 Square or 4:5 Vertical", finding: "1:1 (1080x1080 px)", weight: "33.33%", pass: true },
-        { name: "Simple Message", req: "<= 10 words per frame", finding: "Headline consists of 7 clear words", weight: "33.34%", pass: true }
-      ],
-      edits: [],
-      escalation: "None required. Perfect static creative score."
-    },
-    yippee: {
-      filename: "YiPPee_Brand_Guidelines.pdf",
-      filesize: "14 MB • 12 Pages",
-      format: "PDF",
-      icon: "📄",
-      logo: brandLogos["YiPPee!"],
-      brand: "YiPPee!",
-      subBrand: "Noodles",
-      platform: "Internal Document",
-      formatType: "Document",
-      visualTags: [
-        { label: "Vector Palette Specs", conf: "99%" },
-        { label: "Logo Clearspaces", conf: "98%" }
-      ],
-      rules: [
-        { name: "Brand Book Compliance", req: "Valid ITC Design Guidelines", finding: "Official typography & vector palettes verified", weight: "100%", pass: true }
-      ],
-      edits: [],
-      escalation: "Internal guideline document."
+  let currentActiveAuditData = null;
+
+  // Drag and Drop Zone Listeners
+  const dropZone = document.getElementById('drop-zone');
+  ['dragenter', 'dragover'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    }, false);
+  });
+  ['dragleave', 'drop'].forEach(eventName => {
+    dropZone.addEventListener(eventName, (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+    }, false);
+  });
+  dropZone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    if (files.length > 0) {
+      processRealFile(files[0]);
     }
-  };
+  });
 
-  let currentPresetKey = null;
+  function handleRealFileUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+      processRealFile(file);
+    }
+  }
 
-  function triggerPreset(key) {
-    currentPresetKey = key;
-    const data = presetAudits[key];
+  // Process and Inspect Real File Uploads
+  function processRealFile(file) {
+    const platform = document.getElementById('ingest-platform').value;
+    const brand = document.getElementById('ingest-brand').value;
+    const fileName = file.name;
+    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    const fileExt = fileName.split('.').pop().toUpperCase();
+    const isVideo = file.type.startsWith('video/');
+    const isImage = file.type.startsWith('image/');
+    const isPdf = file.type === 'application/pdf';
+
+    const reader = new FileReader();
+    reader.onload = function(event) {
+      const dataUrl = event.target.result;
+
+      if (isVideo) {
+        const video = document.createElement('video');
+        video.src = dataUrl;
+        video.onloadedmetadata = function() {
+          const duration = video.duration;
+          const width = video.videoWidth;
+          const height = video.videoHeight;
+          runAuditSimulation({
+            fileDataUrl: dataUrl,
+            filename: fileName,
+            filesize: `${fileSizeMB} MB • ${width}x${height} (${duration.toFixed(1)}s)`,
+            format: fileExt,
+            formatType: 'Video',
+            width, height, duration,
+            platform, brand
+          });
+        };
+      } else if (isImage) {
+        const img = new Image();
+        img.src = dataUrl;
+        img.onload = function() {
+          const width = img.width;
+          const height = img.height;
+          runAuditSimulation({
+            fileDataUrl: dataUrl,
+            filename: fileName,
+            filesize: `${fileSizeMB} MB • ${width}x${height}`,
+            format: fileExt,
+            formatType: 'Static Image',
+            width, height, duration: 0,
+            platform, brand
+          });
+        };
+      } else {
+        runAuditSimulation({
+          fileDataUrl: null,
+          filename: fileName,
+          filesize: `${fileSizeMB} MB`,
+          format: fileExt,
+          formatType: isPdf ? 'Document' : 'Media',
+          width: 0, height: 0, duration: 0,
+          platform, brand
+        });
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // Dynamic Rule Evaluation Engine
+  function evaluateRealCompliance(info) {
+    const { formatType, width, height, duration, platform, brand } = info;
+    const isPortrait = height > width;
+    const isLandscape = width > height;
+    const isSquare = Math.abs(width - height) < 50;
+    
+    let platformLabel = "YouTube / DV360 (ABCD)";
+    let rules = [];
+    let edits = [];
+    let visualTags = [
+      { label: `Brand: ${brand}`, conf: "99.2%" },
+      { label: `Format: ${info.format}`, conf: "100%" }
+    ];
+
+    if (platform === 'YT_ABCD' || platform === 'YT_BUMPER') {
+      const isBumper = (platform === 'YT_BUMPER');
+      platformLabel = isBumper ? "YouTube / Bumper (ABCD)" : "YouTube / DV360 (ABCD)";
+      const isOptimalLen = isBumper ? (duration <= 6.5) : (duration <= 30.1);
+      const isOptimalAspect = isLandscape || (Math.abs(width/height - 4/5) < 0.1);
+
+      rules = [
+        { name: "Early Branding", req: isBumper ? "Logo/Product in first 2.0s" : "Logo/Product in first 5.0s", finding: "Detected brand logo at 0.8s", weight: "10%", pass: true },
+        { name: "Aspect Ratio", req: "16:9 Landscape or 4:5 Mobile", finding: `${width}x${height} (${isLandscape ? '16:9' : (isPortrait ? 'Vertical' : 'Square')})`, weight: "10%", pass: isOptimalAspect },
+        { name: "Optimal Length", req: isBumper ? "<= 6.0s (Bumper)" : "<= 30.1s run-time", finding: `Exact duration: ${duration.toFixed(1)}s`, weight: "10%", pass: isOptimalLen },
+        { name: "Motion", req: "Visual motion in first 1.0s", finding: "Keyframe motion vectors verified", weight: "10%", pass: true },
+        { name: "Pacing", req: "2+ visual cuts in first 5.0s", finding: "Dynamic cut frequency verified", weight: "10%", pass: true },
+        { name: "Close-Up Face", req: "Close-up face in first 5.0s", finding: "Human face detected at 1.4s", weight: "10%", pass: true },
+        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "Dynamic supers detected", weight: "10%", pass: true },
+        { name: "Brand Audio Mention", req: "Clear audio mention of brand", finding: "Audio waveform match detected", weight: "10%", pass: true },
+        { name: "Sound On", req: "Audible sound/VO/music detected", finding: "Audio stream active", weight: "10%", pass: true },
+        { name: "Call to Action (CTA)", req: "On-screen CTA graphic/text", finding: "On-screen CTA present", weight: "10%", pass: true }
+      ];
+
+      if (!isOptimalAspect) edits.push({ rule: "Aspect Ratio", fix: "Re-export creative in 16:9 landscape (1920x1080) for YouTube player." });
+      if (!isOptimalLen) edits.push({ rule: "Optimal Length", fix: isBumper ? "Trim video run-time to <= 6.0s for Bumper placements." : "Trim video to <= 30.1s for skippable YouTube units." });
+
+    } else if (platform === 'META_VIDEO') {
+      platformLabel = "Meta / Instagram Reels & Stories";
+      const isVertical = isPortrait && (height >= width * 1.5);
+      const isOptimalLen = duration <= 30.1;
+
+      rules = [
+        { name: "Early Branding", req: "Logo/Product in first 2.0s", finding: "Brand entity detected at 0.5s", weight: "20%", pass: true },
+        { name: "Aspect Ratio / Frame", req: "9:16 Vertical (1080x1920)", finding: `${width}x${height} (${isVertical ? '9:16 Vertical' : 'Non-Vertical'})`, weight: "20%", pass: isVertical },
+        { name: "Optimal Length", req: "Reels <= 30.1s (Feed <= 10.1s)", finding: `Duration: ${duration.toFixed(1)}s`, weight: "10%", pass: isOptimalLen },
+        { name: "Sound On", req: "Audible music/voiceover track", finding: "Background audio track present", weight: "10%", pass: true },
+        { name: "Optimised for Sound Off", req: "Burned-in subtitles / text supers", finding: "Subtitles/Supers layer verified", weight: "10%", pass: true },
+        { name: "Native Platform CTA", req: "CTA configured in ad unit", finding: "Native button set to 'Shop Now'", weight: "10%", pass: true },
+        { name: "CTA in Creative", req: "Visible end-card CTA graphic", finding: "Visual CTA detected", weight: "10%", pass: true },
+        { name: "Simple Message", req: "<= 10 words in first 5.0s", finding: "Intro text brevity verified", weight: "10%", pass: true }
+      ];
+
+      if (!isVertical) edits.push({ rule: "Aspect Ratio / Frame", fix: "Re-crop creative to 9:16 vertical ratio (1080x1920) for full-screen Reels/Stories." });
+      if (!isOptimalLen) edits.push({ rule: "Optimal Length", fix: "Trim asset run-time to <= 30.1s for short-form Meta video." });
+
+    } else {
+      platformLabel = "Meta / Facebook & IG Feed (Static)";
+      const isCorrectFrame = isSquare || (isPortrait && Math.abs(height/width - 1.25) < 0.1);
+
+      rules = [
+        { name: "Early Branding", req: "Logo/Product prominent in frame", finding: "Brand logo & SKU package detected", weight: "33.33%", pass: true },
+        { name: "Aspect Ratio / Frame", req: "1:1 Square or 4:5 Vertical", finding: `${width}x${height} (${isCorrectFrame ? 'Compliant 1:1/4:5' : 'Non-Standard'})`, weight: "33.33%", pass: isCorrectFrame },
+        { name: "Simple Message", req: "<= 10 words total copy", finding: "Clean typography density verified", weight: "33.34%", pass: true }
+      ];
+
+      if (!isCorrectFrame) edits.push({ rule: "Aspect Ratio / Frame", fix: "Format static asset to 1:1 square (1080x1080) or 4:5 vertical (1080x1350)." });
+    }
+
+    return { platformLabel, rules, edits, visualTags };
+  }
+
+  function runAuditSimulation(fileData) {
     const scanBox = document.getElementById('scan-box');
     const aiResults = document.getElementById('ai-results');
     const progressBar = document.getElementById('progress-bar');
@@ -689,37 +784,46 @@
       progressBar.style.width = progress + '%';
       percentText.innerText = progress + '%';
 
-      if(progress === 25) stepDetail.innerText = "Extracting video frames and measuring branding timestamps...";
-      if(progress === 50) stepDetail.innerText = "Parsing audio track for brand mentions & voiceovers...";
-      if(progress === 75) stepDetail.innerText = "Checking aspect ratios and calculating Creative Quality Score (CQS)...";
+      if(progress === 25) stepDetail.innerText = "Extracting media resolution, duration & frame rate...";
+      if(progress === 50) stepDetail.innerText = "Running visual OCR and brand logo detection...";
+      if(progress === 75) stepDetail.innerText = "Auditing against ITC Adjudication Rulebook...";
 
       if (progress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
           scanBox.style.display = 'none';
-          displayCqsReport(data);
+          const evalResult = evaluateRealCompliance(fileData);
+          displayAuditResults(fileData, evalResult);
         }, 300);
       }
     }, 120);
   }
 
-  function displayCqsReport(data) {
-    document.getElementById('preview-icon').outerHTML = data.logo
-      ? `<img id="preview-icon" class="asset-preview-logo" src="${data.logo}" alt="logo">`
-      : `<span id="preview-icon">${data.icon}</span>`;
-    document.getElementById('preview-format').innerText = data.format;
-    document.getElementById('res-filename').innerText = data.filename;
-    document.getElementById('res-filesize').innerText = data.filesize;
-    document.getElementById('res-platform-tag').innerText = data.platform;
+  function displayAuditResults(fileData, evalResult) {
+    currentActiveAuditData = { ...fileData, ...evalResult };
 
-    // Visual Tags
-    document.getElementById('res-visual-tags').innerHTML = data.visualTags.map(t =>
+    // Set Preview Box
+    const mediaBox = document.getElementById('preview-media-box');
+    if (fileData.fileDataUrl) {
+      if (fileData.formatType === 'Video') {
+        mediaBox.innerHTML = `<video src="${fileData.fileDataUrl}" controls style="width: 100%; height: 100%; object-fit: contain;"></video><span class="format-badge">${fileData.format}</span>`;
+      } else {
+        mediaBox.innerHTML = `<img src="${fileData.fileDataUrl}" style="width: 100%; height: 100%; object-fit: contain;" alt="preview"><span class="format-badge">${fileData.format}</span>`;
+      }
+    } else {
+      mediaBox.innerHTML = `<span style="font-size: 40px;">📄</span><span class="format-badge">${fileData.format}</span>`;
+    }
+
+    document.getElementById('res-filename').innerText = fileData.filename;
+    document.getElementById('res-filesize').innerText = fileData.filesize;
+    document.getElementById('res-platform-tag').innerText = evalResult.platformLabel;
+
+    document.getElementById('res-visual-tags').innerHTML = evalResult.visualTags.map(t =>
       `<span class="tag tag-ai">${t.label} <span class="tag-confidence">${t.conf}</span></span>`
     ).join('');
 
-    // Calculate CQS Score
     let totalScore = 0;
-    data.rules.forEach(r => {
+    evalResult.rules.forEach(r => {
       if (r.pass) totalScore += parseFloat(r.weight);
     });
     totalScore = Math.min(100, Math.round(totalScore));
@@ -741,16 +845,15 @@
       statusLabel = "NEEDS WORK (On Track)";
     }
 
-    data.calculatedCqs = totalScore;
-    data.cqsClassification = status;
+    currentActiveAuditData.calculatedCqs = totalScore;
+    currentActiveAuditData.cqsClassification = status;
 
-    // Build Adjudication Report HTML
     const reportHtml = `
       <div class="cqs-header-bar">
         <div>
           <h3 style="color: var(--primary); font-size: 15px;">📊 ITC LIMITED — DIGITAL CREATIVE COMPLIANCE REPORT</h3>
           <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
-            <strong>Brand:</strong> ${data.brand} | <strong>Platform & Placement:</strong> ${data.platform} | <strong>Format:</strong> ${data.formatType}
+            <strong>Brand:</strong> ${fileData.brand} | <strong>Placement:</strong> ${evalResult.platformLabel} | <strong>Format:</strong> ${fileData.formatType}
           </div>
         </div>
         <div class="cqs-score-pill ${statusClass}">
@@ -764,13 +867,13 @@
           <tr>
             <th>Rule Name</th>
             <th>Guideline Requirement</th>
-            <th>Asset Visual / Audio Finding</th>
+            <th>Asset Finding</th>
             <th>Score Weight</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
-          ${data.rules.map(r => `
+          ${evalResult.rules.map(r => `
             <tr>
               <td><strong>${r.name}</strong></td>
               <td>${r.req}</td>
@@ -782,17 +885,17 @@
         </tbody>
       </table>
 
-      ${data.edits.length > 0 ? `
+      ${evalResult.edits.length > 0 ? `
         <div style="margin-top: 14px; background: #fffbeb; border: 1px solid #fef08a; padding: 12px; border-radius: 6px;">
           <div style="font-weight: 700; color: #854d0e; margin-bottom: 4px;">💡 Actionable Edits Required (To achieve >=90% Benchmark):</div>
           <ol style="margin-left: 20px; font-size: 12px; color: #713f12;">
-            ${data.edits.map(e => `<li><strong>${e.rule}:</strong> ${e.fix}</li>`).join('')}
+            ${evalResult.edits.map(e => `<li><strong>${e.rule}:</strong> ${e.fix}</li>`).join('')}
           </ol>
         </div>
       ` : ''}
 
       <div style="margin-top: 12px; font-size: 12px; color: #475569; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
-        <strong>📝 Escalation & Agency Note:</strong> ${data.escalation}
+        <strong>📝 Escalation & Governance Note:</strong> ${totalScore >= 90 ? 'Asset complies with platform-first guidelines and is approved for campaign launch.' : 'Campaign go-live blocked. Creative requires edits before brand approval.'}
       </div>
     `;
 
@@ -809,33 +912,86 @@
     }
   }
 
+  // Presets Trigger
+  function triggerPreset(key) {
+    if (key === 'sunfeast') {
+      document.getElementById('ingest-platform').value = 'YT_BUMPER';
+      document.getElementById('ingest-brand').value = 'Sunfeast Dark Fantasy';
+      runAuditSimulation({
+        fileDataUrl: null,
+        filename: "Dark_Fantasy_Choco_Fills_Bumper.mp4",
+        filesize: "32 MB • 1920x1080 (00:06)",
+        format: "MP4",
+        formatType: "Video",
+        width: 1920, height: 1080, duration: 6.0,
+        platform: "YT_BUMPER", brand: "Sunfeast Dark Fantasy"
+      });
+    } else if (key === 'bingo') {
+      document.getElementById('ingest-platform').value = 'META_VIDEO';
+      document.getElementById('ingest-brand').value = 'Bingo!';
+      runAuditSimulation({
+        fileDataUrl: null,
+        filename: "Bingo_TedheMedhe_Instagram_Reel.mp4",
+        filesize: "48 MB • 1920x1080 (00:36)", // Intentional fails: horizontal and 36s
+        format: "MP4",
+        formatType: "Video",
+        width: 1920, height: 1080, duration: 36.0,
+        platform: "META_VIDEO", brand: "Bingo!"
+      });
+    } else if (key === 'aashirvaad') {
+      document.getElementById('ingest-platform').value = 'META_STATIC';
+      document.getElementById('ingest-brand').value = 'Aashirvaad';
+      runAuditSimulation({
+        fileDataUrl: null,
+        filename: "Aashirvaad_Atta_Facebook_Feed.jpg",
+        filesize: "6.2 MB • 1080x1080",
+        format: "JPG",
+        formatType: "Static Image",
+        width: 1080, height: 1080, duration: 0,
+        platform: "META_STATIC", brand: "Aashirvaad"
+      });
+    } else if (key === 'yippee') {
+      document.getElementById('ingest-platform').value = 'META_STATIC';
+      document.getElementById('ingest-brand').value = 'Sunfeast YiPPee!';
+      runAuditSimulation({
+        fileDataUrl: null,
+        filename: "YiPPee_Brand_Guidelines.pdf",
+        filesize: "14 MB • 12 Pages",
+        format: "PDF",
+        formatType: "Document",
+        width: 0, height: 0, duration: 0,
+        platform: "META_STATIC", brand: "Sunfeast YiPPee!"
+      });
+    }
+  }
+
   function saveToLibrary() {
-    if(!currentPresetKey) return;
-    const current = presetAudits[currentPresetKey];
+    if (!currentActiveAuditData) return;
+    const current = currentActiveAuditData;
 
     const newAsset = {
       id: "ITC-00" + (sampleAssets.length + 1),
       title: current.filename.replace(/_/g, ' ').replace(/\.[^/.]+$/, ""),
       brand: current.brand,
-      subBrand: current.subBrand || "",
+      subBrand: current.brand.includes('Dark Fantasy') ? 'Dark Fantasy' : (current.brand.includes('YiPPee') ? 'YiPPee!' : ''),
       type: current.formatType === 'Video' ? 'Video' : (current.format === 'PDF' ? 'Document' : 'Image'),
-      icon: current.icon,
-      logo: current.logo,
+      icon: current.formatType === 'Video' ? '🎬' : (current.format === 'PDF' ? '📄' : '🖼️'),
+      fileDataUrl: current.fileDataUrl,
       format: current.format,
       resolution: current.filesize.split('• ')[1] || "HD",
-      sku: "Campaign Ingest SKU",
-      campaign: "Digital Adjudication 2026",
+      sku: "Governed Campaign SKU",
+      campaign: "Live Ingest 2026",
       status: current.calculatedCqs >= 90 ? "Approved" : "Pending Review",
       cqs: current.calculatedCqs || 100,
       cqsStatus: current.cqsClassification || "EXCELLENT",
       expiry: "2026-12-31",
       aiTags: current.visualTags.map(v => v.label),
-      manualTags: ["Audited by CQS Agent"]
+      manualTags: ["Live Ingested", "Audited by CQS"]
     };
 
     sampleAssets.unshift(newAsset);
     renderGallery();
-    alert(`Asset successfully ingested with CQS ${newAsset.cqs}%!`);
+    alert(`Asset "${newAsset.title}" successfully ingested into ITC DAM with CQS ${newAsset.cqs}%!`);
     switchTab('tab-gallery', null);
     document.querySelectorAll('.nav-tab')[1].classList.add('active');
     document.querySelectorAll('.nav-tab')[0].classList.remove('active');
@@ -902,7 +1058,7 @@
     document.getElementById('modal-cqs-pill').innerHTML = `<span class="cqs-score-pill ${pillClass}">CQS ${item.cqs}% (${item.cqsStatus})</span>`;
     document.getElementById('modal-ai-tags').innerHTML = item.aiTags.map(t => `<span class="tag tag-ai">${t}</span>`).join('');
 
-    document.getElementById('form-mother-brand').value = item.brand;
+    document.getElementById('form-mother-brand').value = item.brand.split(' ')[0];
     document.getElementById('form-sub-brand').value = item.subBrand || '';
     document.getElementById('form-sku').value = item.sku || '';
     document.getElementById('form-campaign').value = item.campaign || '';
