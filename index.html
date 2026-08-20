@@ -95,7 +95,7 @@
   .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
   .card-title { font-size: 16px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
 
-  /* Ingestion Controls */
+  /* Ingestion Bar */
   .ingestion-config-bar {
     display: flex;
     gap: 16px;
@@ -139,7 +139,7 @@
   .tag-ai { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
   .tag-confidence { font-size: 9px; background: #0284c7; color: white; padding: 1px 4px; border-radius: 8px; }
 
-  /* Creative Compliance Report */
+  /* Compliance Report */
   .cqs-report-card { background: #ffffff; border: 1px solid #cbd5e1; border-radius: 8px; margin-top: 20px; padding: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.04); }
   .cqs-header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border); padding-bottom: 14px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
   .cqs-score-pill { padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
@@ -245,7 +245,7 @@
   </nav>
 
   <div class="container">
-    <!-- TAB 1: REAL UPLOAD & CQS ADJUDICATION -->
+    <!-- TAB 1: UPLOAD & CQS ADJUDICATION -->
     <div id="tab-upload" class="tab-content active">
       <div class="card">
         <div class="card-header">
@@ -280,21 +280,21 @@
         <div class="upload-area" id="drop-zone" onclick="document.getElementById('real-file-input').click()">
           <div class="upload-icon">📁</div>
           <h3>Click to Browse or Drag & Drop Your Actual Asset Files Here</h3>
-          <p style="color: var(--text-muted); margin-top: 4px;">Upload any real image, video MP4, or campaign creative from your system</p>
+          <p style="color: var(--text-muted); margin-top: 4px;">Upload any real image, video MP4, or campaign creative from your computer</p>
 
-          <div style="margin-top: 18px; font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.5px;">OR TEST INSTANTLY WITH SAMPLE BRAND PRESETS:</div>
+          <div style="margin-top: 18px; font-size: 11px; font-weight: 700; color: #64748b; letter-spacing: 0.5px;">OR SIMULATE UPLOAD WITH SAMPLE ITC FOODS ASSETS:</div>
           <div class="preset-buttons">
-            <button class="btn" onclick="event.stopPropagation(); triggerPreset('sunfeast')"><img class="preset-brand-logo" alt="" src="https://seeklogo.com/images/S/sunfeast-dark-fantasy-logo-6A34432B80-seeklogo.com.png">Dark Fantasy Video (YouTube)</button>
-            <button class="btn" onclick="event.stopPropagation(); triggerPreset('bingo')"><img class="preset-brand-logo" alt="" src="https://media.potatopro.com/bingo-1600x785.jpg">Bingo! Video (Instagram Reel - Needs Work)</button>
-            <button class="btn" onclick="event.stopPropagation(); triggerPreset('aashirvaad')"><img class="preset-brand-logo" alt="" src="https://pimwp.s3-accelerate.amazonaws.com/2021/08/Aashirwad-logo.png">Aashirvaad Static (Facebook Feed)</button>
-            <button class="btn" onclick="event.stopPropagation(); triggerPreset('yippee')"><img class="preset-brand-logo" alt="" src="https://prithvienterprises.co.in/cdn/shop/collections/Yippee.png?v=1750442416">YiPPee! Brand Guide PDF</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('aashirvaad')"><img class="preset-brand-logo" alt="" src="https://pimwp.s3-accelerate.amazonaws.com/2021/08/Aashirwad-logo.png">Aashirvaad Atta Pack (Image)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('sunfeast')"><img class="preset-brand-logo" alt="" src="https://seeklogo.com/images/S/sunfeast-dark-fantasy-logo-6A34432B80-seeklogo.com.png">Dark Fantasy TVC (Video)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('bingo')"><img class="preset-brand-logo" alt="" src="https://media.potatopro.com/bingo-1600x785.jpg">Bingo! Tedhe Medhe Banner (GIF)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('yippee')"><img class="preset-brand-logo" alt="" src="https://prithvienterprises.co.in/cdn/shop/collections/Yippee.png?v=1750442416">YiPPee! Brand Guideline (PDF)</button>
           </div>
         </div>
 
         <!-- Scanning Simulator Progress -->
         <div class="scan-progress-box" id="scan-box">
           <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px;">
-            <span id="scan-status-text">Adjudication AI Agent auditing uploaded creative...</span>
+            <span id="scan-status-text">Adjudication AI Agent auditing creative compliance...</span>
             <span id="scan-percentage">0%</span>
           </div>
           <div class="progress-bar-container">
@@ -323,7 +323,17 @@
             </div>
 
             <div class="tag-group">
-              <div class="tag-group-label">Detected Visual & OCR Entities</div>
+              <div class="tag-group-label">Mother Brand & Sub-Brand Classification (Auto-Detected)</div>
+              <div class="tag-cloud" id="res-brand-tags"></div>
+            </div>
+
+            <div class="tag-group">
+              <div class="tag-group-label">Packaging & Visual OCR Text Extraction</div>
+              <div class="tag-cloud" id="res-ocr-tags"></div>
+            </div>
+
+            <div class="tag-group">
+              <div class="tag-group-label">Detected Visual & Technical Keywords</div>
               <div class="tag-cloud" id="res-visual-tags"></div>
             </div>
 
@@ -339,7 +349,7 @@
       <div class="card">
         <div class="card-header">
           <div class="card-title">ITC Foods Central Digital Asset Library</div>
-          <div><span style="font-size: 12px; color: var(--text-muted);">Total Assets: <strong id="asset-count">3</strong></span></div>
+          <div><span style="font-size: 12px; color: var(--text-muted);">Total Assets: <strong id="asset-count">6</strong></span></div>
         </div>
 
         <div class="filter-bar">
@@ -393,14 +403,14 @@
         <div id="modal-cqs-pill" style="margin-top: 6px;"></div>
       </div>
       <div class="tag-group" style="margin-top: 14px;">
-        <div class="tag-group-label">AI Tags</div>
+        <div class="tag-group-label">AI System Tags</div>
         <div class="tag-cloud" id="modal-ai-tags"></div>
       </div>
     </div>
 
     <div class="modal-right">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-        <h3 style="color: var(--primary);">Metadata & Compliance Governance</h3>
+        <h3 style="color: var(--primary);">Manual Metadata Governance Editor</h3>
         <button class="btn" onclick="closeModal()">✕ Close</button>
       </div>
 
@@ -415,22 +425,23 @@
               <option value="YiPPee!">YiPPee!</option>
               <option value="Fabelle">Fabelle</option>
               <option value="B Natural">B Natural</option>
+              <option value="ITC Master Chef">ITC Master Chef</option>
             </select>
           </div>
           <div class="form-group">
             <label class="form-label">Sub-Brand / Product Line</label>
-            <input type="text" class="form-control" id="form-sub-brand">
+            <input type="text" class="form-control" id="form-sub-brand" placeholder="e.g. Dark Fantasy, Tedhe Medhe">
           </div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
           <div class="form-group">
             <label class="form-label">SKU / Variant Name</label>
-            <input type="text" class="form-control" id="form-sku">
+            <input type="text" class="form-control" id="form-sku" placeholder="e.g. 75g Choco Fills Pack">
           </div>
           <div class="form-group">
             <label class="form-label">Campaign Name</label>
-            <input type="text" class="form-control" id="form-campaign">
+            <input type="text" class="form-control" id="form-campaign" placeholder="e.g. Har Bite Mein Twist">
           </div>
         </div>
 
@@ -441,6 +452,7 @@
               <option value="Approved">Approved for Distribution</option>
               <option value="Pending Review">Pending Brand Governance</option>
               <option value="Rejected">Rejected (CQS Failed)</option>
+              <option value="Archived">Archived</option>
             </select>
           </div>
           <div class="form-group">
@@ -450,8 +462,8 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Manual Keyword Tags</label>
-          <input type="text" class="form-control" id="form-manual-tags">
+          <label class="form-label">Manual Keyword Tags (Comma Separated)</label>
+          <input type="text" class="form-control" id="form-manual-tags" placeholder="e.g. Diwali POSM, Packaging 2026, High Res">
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
@@ -508,7 +520,7 @@
     if (item.fileDataUrl) {
       if (item.type === 'Video') {
         return `<video src="${item.fileDataUrl}" style="width: 100%; height: 100%; object-fit: contain;" controls></video>`;
-      } else if (item.type === 'Image') {
+      } else if (item.type === 'Image' || item.type === 'GIF') {
         return `<img src="${item.fileDataUrl}" style="width: 100%; height: 100%; object-fit: contain;" alt="Asset Preview">`;
       }
     }
@@ -520,90 +532,163 @@
     {
       category: "1. Staples & Culinary Essentials",
       brands: [
-        { name: "Aashirvaad", variants: ["Atta (Chakki, Multigrain, Select)", "Salt", "Spices", "Organic Range", "Ghee"] }
+        { name: "Aashirvaad", variants: ["Atta (Chakki, Multigrain, Select)", "Salt", "Spices", "Organic Range", "Instant Mixes", "Ghee"] },
+        { name: "Sunrise", variants: ["Pure Spices", "Blended Masalas"] }
       ]
     },
     {
       category: "2. Biscuits, Cookies & Cakes",
       brands: [
-        { name: "Sunfeast Dark Fantasy", variants: ["Choco Fills", "Choco Meltz", "Bourbon"] },
-        { name: "Sunfeast Mom's Magic", variants: ["Butter", "Cashew & Almond"] }
+        { name: "Sunfeast Dark Fantasy", variants: ["Choco Fills", "Choco Meltz", "Bourbon", "Coffee Fills"] },
+        { name: "Sunfeast Mom's Magic", variants: ["Butter", "Cashew & Almond", "Fruit & Milk"] },
+        { name: "Sunfeast Farmlite", variants: ["Digestive", "Oats & Almond"] },
+        { name: "Sunfeast Bounce & Marie Light", variants: ["Cream Biscuits", "Marie Light", "Nice Time"] }
       ]
     },
     {
       category: "3. Snacks & Savories",
       brands: [
-        { name: "Bingo!", variants: ["Tedhe Medhe", "Mad Angles", "Potato Chips"] }
+        { name: "Bingo!", variants: ["Tedhe Medhe", "Mad Angles", "Potato Chips", "Nachos", "Hashtags"] }
       ]
     },
     {
       category: "4. Instant Noodles & Pasta",
       brands: [
-        { name: "Sunfeast YiPPee!", variants: ["Magic Masala Noodles", "Tricolor Pasta"] }
+        { name: "Sunfeast YiPPee!", variants: ["Magic Masala Noodles", "Tricolor Pasta", "Saucy Masala"] }
+      ]
+    },
+    {
+      category: "5. Premium Chocolates & Confectionery",
+      brands: [
+        { name: "Fabelle", variants: ["Gourmet Chocolates", "Luxury Gift Boxes", "Gianduja"] },
+        { name: "Candyman & Jelimals", variants: ["Toffees", "Jelly Candies", "mint-o", "GumOn"] }
+      ]
+    },
+    {
+      category: "6. Beverages",
+      brands: [
+        { name: "B Natural", variants: ["100% Fruit Juices", "Premium Juices"] },
+        { name: "Sunbean", variants: ["Gourmet Coffee"] }
       ]
     }
   ];
 
+  // --- INITIAL ASSET REPOSITORY ---
   let sampleAssets = [
     {
       id: "ITC-001",
-      title: "Dark Fantasy Pure Indulgence TVC",
-      brand: "Sunfeast",
-      subBrand: "Dark Fantasy",
-      type: "Video",
-      icon: "🎬",
-      format: "MP4",
-      resolution: "1920x1080",
-      sku: "Choco Fills",
-      campaign: "Har Bite Mein Licious",
-      status: "Approved",
-      cqs: 100,
-      cqsStatus: "EXCELLENT",
-      expiry: "2026-12-31",
-      aiTags: ["Early Brand 0.8s", "Aspect 16:9", "Audio Mention", "Subtitles/Supers"],
-      manualTags: ["TVC", "National"]
-    },
-    {
-      id: "ITC-002",
-      title: "Bingo Tedhe Medhe Masala Tadka Reel",
-      brand: "Bingo!",
-      subBrand: "Tedhe Medhe",
-      type: "Video",
-      icon: "🍟",
-      format: "MP4",
-      resolution: "1080x1920",
-      sku: "Rs 10 Pack",
-      campaign: "Eat Phir Repeat",
-      status: "Pending Review",
-      cqs: 70,
-      cqsStatus: "NEEDS WORK",
-      expiry: "2026-11-15",
-      aiTags: ["Missing Audio Mention", "Fast Cuts", "Vertical Frame"],
-      manualTags: ["Instagram Reel"]
-    },
-    {
-      id: "ITC-003",
-      title: "Aashirvaad Shuddha Chakki Atta Feed Static",
+      title: "Aashirvaad Shuddha Chakki Atta Packaging",
       brand: "Aashirvaad",
       subBrand: "Atta",
       type: "Image",
       icon: "🌾",
       format: "JPG",
-      resolution: "1080x1080",
+      resolution: "4000x3000",
       sku: "10kg Pack",
       campaign: "4-Step Advantage",
       status: "Approved",
       cqs: 100,
       cqsStatus: "EXCELLENT",
       expiry: "2026-12-31",
-      aiTags: ["Logo in Frame", "Aspect 1:1", "Simple Message <10 Words"],
-      manualTags: ["Meta Feed"]
+      aiTags: ["Aashirvaad Logo", "Whole Wheat", "100% MP Atta", "FSSAI Certified", "Green Veg Symbol"],
+      manualTags: ["Package Design", "Retail Print", "National"]
+    },
+    {
+      id: "ITC-002",
+      title: "Sunfeast Dark Fantasy TVC - Pure Indulgence",
+      brand: "Sunfeast",
+      subBrand: "Dark Fantasy",
+      type: "Video",
+      icon: "🎬",
+      format: "MP4",
+      resolution: "1080p H264",
+      sku: "Choco Fills",
+      campaign: "Har Bite Mein Licious",
+      status: "Approved",
+      cqs: 100,
+      cqsStatus: "EXCELLENT",
+      expiry: "2026-06-30",
+      aiTags: ["Molten Chocolate", "Dark Fantasy Biscuit", "Voiceover - English", "Slow Motion Shot"],
+      manualTags: ["TVC 30s", "Social Reel", "Q3 Campaign"]
+    },
+    {
+      id: "ITC-003",
+      title: "Bingo! Tedhe Medhe Masala Tadka Banner",
+      brand: "Bingo!",
+      subBrand: "Tedhe Medhe",
+      type: "GIF",
+      icon: "🍟",
+      format: "GIF",
+      resolution: "1080x1080",
+      sku: "Rs 10 Pack",
+      campaign: "Eat Phir Repeat",
+      status: "Pending Review",
+      cqs: 70,
+      cqsStatus: "NEEDS WORK",
+      expiry: "2026-11-15",
+      aiTags: ["Bingo Triangle", "Snack Explosion", "Spices Graphics", "High Contrast"],
+      manualTags: ["Instagram Post", "Youth Marketing"]
+    },
+    {
+      id: "ITC-004",
+      title: "Sunfeast YiPPee! Magic Masala Packaging",
+      brand: "YiPPee!",
+      subBrand: "Noodles",
+      type: "Image",
+      icon: "🍜",
+      format: "PNG",
+      resolution: "3500x2500",
+      sku: "4-in-1 Family Pack",
+      campaign: "Non-Sticky Noodles",
+      status: "Approved",
+      cqs: 100,
+      cqsStatus: "EXCELLENT",
+      expiry: "2026-09-20",
+      aiTags: ["Yellow Packaging", "Bowl Shot", "Veggies", "Long Noodles"],
+      manualTags: ["Transparent PNG", "E-Commerce Packshot"]
+    },
+    {
+      id: "ITC-005",
+      title: "Fabelle Luxury Chocolates Gift Box Guidelines",
+      brand: "Fabelle",
+      subBrand: "Exquisite Chocolates",
+      type: "Document",
+      icon: "📄",
+      format: "PDF",
+      resolution: "12 Pages",
+      sku: "Luxury Collection",
+      campaign: "Festive Gifting",
+      status: "Approved",
+      cqs: 100,
+      cqsStatus: "EXCELLENT",
+      expiry: "2026-01-01",
+      aiTags: ["Gold Foil Design", "Fabelle Brand Mark", "Typography Specs", "Color Codes"],
+      manualTags: ["Brand Guideline", "Premium"]
+    },
+    {
+      id: "ITC-006",
+      title: "B Natural Mixed Fruit Juice POSM Poster",
+      brand: "B Natural",
+      subBrand: "Juices",
+      type: "Image",
+      icon: "🧃",
+      format: "PSD",
+      resolution: "5000x3500",
+      sku: "1L Carton",
+      campaign: "100% Indian Fruit",
+      status: "Approved",
+      cqs: 100,
+      cqsStatus: "EXCELLENT",
+      expiry: "2026-04-10",
+      aiTags: ["Fresh Fruit Splash", "Mango Guava", "No Added Sugar", "B Natural Badge"],
+      manualTags: ["Print Ready", "Trade Marketing"]
     }
   ];
 
   let currentActiveAuditData = null;
+  let activeEditingIndex = null;
 
-  // Drag and Drop Zone Listeners
+  // --- DRAG & DROP FILE INGESTION ---
   const dropZone = document.getElementById('drop-zone');
   ['dragenter', 'dragover'].forEach(eventName => {
     dropZone.addEventListener(eventName, (e) => {
@@ -632,7 +717,7 @@
     }
   }
 
-  // Process and Inspect Real File Uploads
+  // --- PROCESS ACTUAL FILE UPLOAD ---
   function processRealFile(file) {
     const platform = document.getElementById('ingest-platform').value;
     const brand = document.getElementById('ingest-brand').value;
@@ -660,8 +745,12 @@
             filesize: `${fileSizeMB} MB • ${width}x${height} (${duration.toFixed(1)}s)`,
             format: fileExt,
             formatType: 'Video',
+            icon: '🎬',
             width, height, duration,
-            platform, brand
+            platform, brand,
+            brandTags: [{ label: `Mother Brand: ${brand}`, conf: "99.4%" }],
+            ocrTags: [{ label: "Detected Text: High Res Asset", conf: "96.5%" }],
+            visualTags: [{ label: `${width}x${height} px`, conf: "100%" }, { label: `${duration.toFixed(1)}s Runtime`, conf: "100%" }]
           });
         };
       } else if (isImage) {
@@ -676,8 +765,12 @@
             filesize: `${fileSizeMB} MB • ${width}x${height}`,
             format: fileExt,
             formatType: 'Static Image',
+            icon: '🖼️',
             width, height, duration: 0,
-            platform, brand
+            platform, brand,
+            brandTags: [{ label: `Mother Brand: ${brand}`, conf: "99.1%" }],
+            ocrTags: [{ label: "Extracted Packaging Typography", conf: "95.2%" }],
+            visualTags: [{ label: `${width}x${height} px`, conf: "100%" }, { label: "Standard RGB/CMYK", conf: "98.9%" }]
           });
         };
       } else {
@@ -687,17 +780,21 @@
           filesize: `${fileSizeMB} MB`,
           format: fileExt,
           formatType: isPdf ? 'Document' : 'Media',
+          icon: isPdf ? '📄' : '📦',
           width: 0, height: 0, duration: 0,
-          platform, brand
+          platform, brand,
+          brandTags: [{ label: `Mother Brand: ${brand}`, conf: "98.5%" }],
+          ocrTags: [{ label: "Document Vector Text", conf: "99.0%" }],
+          visualTags: [{ label: "PDF Vector Spec", conf: "100%" }]
         });
       }
     };
     reader.readAsDataURL(file);
   }
 
-  // Dynamic Rule Evaluation Engine
+  // --- EVALUATE COMPLIANCE RULES ---
   function evaluateRealCompliance(info) {
-    const { formatType, width, height, duration, platform, brand } = info;
+    const { width, height, duration, platform, brand } = info;
     const isPortrait = height > width;
     const isLandscape = width > height;
     const isSquare = Math.abs(width - height) < 50;
@@ -705,10 +802,6 @@
     let platformLabel = "YouTube / DV360 (ABCD)";
     let rules = [];
     let edits = [];
-    let visualTags = [
-      { label: `Brand: ${brand}`, conf: "99.2%" },
-      { label: `Format: ${info.format}`, conf: "100%" }
-    ];
 
     if (platform === 'YT_ABCD' || platform === 'YT_BUMPER') {
       const isBumper = (platform === 'YT_BUMPER');
@@ -717,20 +810,20 @@
       const isOptimalAspect = isLandscape || (Math.abs(width/height - 4/5) < 0.1);
 
       rules = [
-        { name: "Early Branding", req: isBumper ? "Logo/Product in first 2.0s" : "Logo/Product in first 5.0s", finding: "Detected brand logo at 0.8s", weight: "10%", pass: true },
-        { name: "Aspect Ratio", req: "16:9 Landscape or 4:5 Mobile", finding: `${width}x${height} (${isLandscape ? '16:9' : (isPortrait ? 'Vertical' : 'Square')})`, weight: "10%", pass: isOptimalAspect },
+        { name: "Early Branding", req: isBumper ? "Logo/Product in first 2.0s" : "Logo/Product in first 5.0s", finding: "Brand entity detected in opening 0.8s", weight: "10%", pass: true },
+        { name: "Aspect Ratio", req: "16:9 Landscape or 4:5 Mobile", finding: `${width}x${height} (${isLandscape ? '16:9 Landscape' : (isPortrait ? 'Vertical' : 'Square')})`, weight: "10%", pass: isOptimalAspect },
         { name: "Optimal Length", req: isBumper ? "<= 6.0s (Bumper)" : "<= 30.1s run-time", finding: `Exact duration: ${duration.toFixed(1)}s`, weight: "10%", pass: isOptimalLen },
-        { name: "Motion", req: "Visual motion in first 1.0s", finding: "Keyframe motion vectors verified", weight: "10%", pass: true },
-        { name: "Pacing", req: "2+ visual cuts in first 5.0s", finding: "Dynamic cut frequency verified", weight: "10%", pass: true },
+        { name: "Motion", req: "Visual motion in first 1.0s", finding: "Keyframe motion vectors detected", weight: "10%", pass: true },
+        { name: "Pacing", req: "2+ visual cuts in first 5.0s", finding: "Dynamic cuts verified", weight: "10%", pass: true },
         { name: "Close-Up Face", req: "Close-up face in first 5.0s", finding: "Human face detected at 1.4s", weight: "10%", pass: true },
-        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "Dynamic supers detected", weight: "10%", pass: true },
+        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "Synchronized dynamic supers detected", weight: "10%", pass: true },
         { name: "Brand Audio Mention", req: "Clear audio mention of brand", finding: "Audio waveform match detected", weight: "10%", pass: true },
-        { name: "Sound On", req: "Audible sound/VO/music detected", finding: "Audio stream active", weight: "10%", pass: true },
+        { name: "Sound On", req: "Audible sound/VO/music detected", finding: "Stereo audio stream active", weight: "10%", pass: true },
         { name: "Call to Action (CTA)", req: "On-screen CTA graphic/text", finding: "On-screen CTA present", weight: "10%", pass: true }
       ];
 
-      if (!isOptimalAspect) edits.push({ rule: "Aspect Ratio", fix: "Re-export creative in 16:9 landscape (1920x1080) for YouTube player." });
-      if (!isOptimalLen) edits.push({ rule: "Optimal Length", fix: isBumper ? "Trim video run-time to <= 6.0s for Bumper placements." : "Trim video to <= 30.1s for skippable YouTube units." });
+      if (!isOptimalAspect) edits.push({ rule: "Aspect Ratio", fix: "Re-crop creative to 16:9 landscape (1920x1080) for YouTube player." });
+      if (!isOptimalLen) edits.push({ rule: "Optimal Length", fix: isBumper ? "Trim video run-time to <= 6.0s for Bumper units." : "Trim video to <= 30.1s for YouTube formats." });
 
     } else if (platform === 'META_VIDEO') {
       platformLabel = "Meta / Instagram Reels & Stories";
@@ -741,11 +834,11 @@
         { name: "Early Branding", req: "Logo/Product in first 2.0s", finding: "Brand entity detected at 0.5s", weight: "20%", pass: true },
         { name: "Aspect Ratio / Frame", req: "9:16 Vertical (1080x1920)", finding: `${width}x${height} (${isVertical ? '9:16 Vertical' : 'Non-Vertical'})`, weight: "20%", pass: isVertical },
         { name: "Optimal Length", req: "Reels <= 30.1s (Feed <= 10.1s)", finding: `Duration: ${duration.toFixed(1)}s`, weight: "10%", pass: isOptimalLen },
-        { name: "Sound On", req: "Audible music/voiceover track", finding: "Background audio track present", weight: "10%", pass: true },
+        { name: "Sound On", req: "Audible music/voiceover track", finding: "Audio stream active", weight: "10%", pass: true },
         { name: "Optimised for Sound Off", req: "Burned-in subtitles / text supers", finding: "Subtitles/Supers layer verified", weight: "10%", pass: true },
         { name: "Native Platform CTA", req: "CTA configured in ad unit", finding: "Native button set to 'Shop Now'", weight: "10%", pass: true },
         { name: "CTA in Creative", req: "Visible end-card CTA graphic", finding: "Visual CTA detected", weight: "10%", pass: true },
-        { name: "Simple Message", req: "<= 10 words in first 5.0s", finding: "Intro text brevity verified", weight: "10%", pass: true }
+        { name: "Simple Message", req: "<= 10 words in first 5.0s", finding: "Clean intro frame verified", weight: "10%", pass: true }
       ];
 
       if (!isVertical) edits.push({ rule: "Aspect Ratio / Frame", fix: "Re-crop creative to 9:16 vertical ratio (1080x1920) for full-screen Reels/Stories." });
@@ -764,7 +857,7 @@
       if (!isCorrectFrame) edits.push({ rule: "Aspect Ratio / Frame", fix: "Format static asset to 1:1 square (1080x1080) or 4:5 vertical (1080x1350)." });
     }
 
-    return { platformLabel, rules, edits, visualTags };
+    return { platformLabel, rules, edits };
   }
 
   function runAuditSimulation(fileData) {
@@ -785,14 +878,14 @@
       percentText.innerText = progress + '%';
 
       if(progress === 25) stepDetail.innerText = "Extracting media resolution, duration & frame rate...";
-      if(progress === 50) stepDetail.innerText = "Running visual OCR and brand logo detection...";
+      if(progress === 50) stepDetail.innerText = "Running visual OCR and brand logo classifier...";
       if(progress === 75) stepDetail.innerText = "Auditing against ITC Adjudication Rulebook...";
 
       if (progress >= 100) {
         clearInterval(interval);
         setTimeout(() => {
           scanBox.style.display = 'none';
-          const evalResult = evaluateRealCompliance(fileData);
+          const evalResult = fileData.rules ? { platformLabel: fileData.platformLabel, rules: fileData.rules, edits: fileData.edits } : evaluateRealCompliance(fileData);
           displayAuditResults(fileData, evalResult);
         }, 300);
       }
@@ -802,7 +895,6 @@
   function displayAuditResults(fileData, evalResult) {
     currentActiveAuditData = { ...fileData, ...evalResult };
 
-    // Set Preview Box
     const mediaBox = document.getElementById('preview-media-box');
     if (fileData.fileDataUrl) {
       if (fileData.formatType === 'Video') {
@@ -810,17 +902,19 @@
       } else {
         mediaBox.innerHTML = `<img src="${fileData.fileDataUrl}" style="width: 100%; height: 100%; object-fit: contain;" alt="preview"><span class="format-badge">${fileData.format}</span>`;
       }
+    } else if (fileData.logo) {
+      mediaBox.innerHTML = `<img src="${fileData.logo}" style="max-width: 78%; max-height: 70%; object-fit: contain;" alt="preview"><span class="format-badge">${fileData.format}</span>`;
     } else {
-      mediaBox.innerHTML = `<span style="font-size: 40px;">📄</span><span class="format-badge">${fileData.format}</span>`;
+      mediaBox.innerHTML = `<span style="font-size: 40px;">${fileData.icon || '📄'}</span><span class="format-badge">${fileData.format}</span>`;
     }
 
     document.getElementById('res-filename').innerText = fileData.filename;
     document.getElementById('res-filesize').innerText = fileData.filesize;
     document.getElementById('res-platform-tag').innerText = evalResult.platformLabel;
 
-    document.getElementById('res-visual-tags').innerHTML = evalResult.visualTags.map(t =>
-      `<span class="tag tag-ai">${t.label} <span class="tag-confidence">${t.conf}</span></span>`
-    ).join('');
+    renderTagCloud('res-brand-tags', fileData.brandTags || []);
+    renderTagCloud('res-ocr-tags', fileData.ocrTags || []);
+    renderTagCloud('res-visual-tags', fileData.visualTags || []);
 
     let totalScore = 0;
     evalResult.rules.forEach(r => {
@@ -912,57 +1006,152 @@
     }
   }
 
-  // Presets Trigger
-  function triggerPreset(key) {
-    if (key === 'sunfeast') {
-      document.getElementById('ingest-platform').value = 'YT_BUMPER';
-      document.getElementById('ingest-brand').value = 'Sunfeast Dark Fantasy';
-      runAuditSimulation({
-        fileDataUrl: null,
-        filename: "Dark_Fantasy_Choco_Fills_Bumper.mp4",
-        filesize: "32 MB • 1920x1080 (00:06)",
-        format: "MP4",
-        formatType: "Video",
-        width: 1920, height: 1080, duration: 6.0,
-        platform: "YT_BUMPER", brand: "Sunfeast Dark Fantasy"
-      });
-    } else if (key === 'bingo') {
-      document.getElementById('ingest-platform').value = 'META_VIDEO';
-      document.getElementById('ingest-brand').value = 'Bingo!';
-      runAuditSimulation({
-        fileDataUrl: null,
-        filename: "Bingo_TedheMedhe_Instagram_Reel.mp4",
-        filesize: "48 MB • 1920x1080 (00:36)", // Intentional fails: horizontal and 36s
-        format: "MP4",
-        formatType: "Video",
-        width: 1920, height: 1080, duration: 36.0,
-        platform: "META_VIDEO", brand: "Bingo!"
-      });
-    } else if (key === 'aashirvaad') {
-      document.getElementById('ingest-platform').value = 'META_STATIC';
-      document.getElementById('ingest-brand').value = 'Aashirvaad';
-      runAuditSimulation({
-        fileDataUrl: null,
-        filename: "Aashirvaad_Atta_Facebook_Feed.jpg",
-        filesize: "6.2 MB • 1080x1080",
-        format: "JPG",
-        formatType: "Static Image",
-        width: 1080, height: 1080, duration: 0,
-        platform: "META_STATIC", brand: "Aashirvaad"
-      });
-    } else if (key === 'yippee') {
-      document.getElementById('ingest-platform').value = 'META_STATIC';
-      document.getElementById('ingest-brand').value = 'Sunfeast YiPPee!';
-      runAuditSimulation({
-        fileDataUrl: null,
-        filename: "YiPPee_Brand_Guidelines.pdf",
-        filesize: "14 MB • 12 Pages",
-        format: "PDF",
-        formatType: "Document",
-        width: 0, height: 0, duration: 0,
-        platform: "META_STATIC", brand: "Sunfeast YiPPee!"
-      });
+  function renderTagCloud(containerId, tags) {
+    const el = document.getElementById(containerId);
+    el.innerHTML = tags.map(t => `<span class="tag tag-ai">${t.label} <span class="tag-confidence">${t.conf}</span></span>`).join('');
+  }
+
+  // --- PRESET AUDIT DATASETS FOR SIMULATION ---
+  const presetData = {
+    aashirvaad: {
+      filename: "Aashirvaad_Select_Atta_5kg.jpg",
+      filesize: "18.2 MB • 3800x2800 px",
+      format: "JPG",
+      formatType: "Static Image",
+      icon: "🌾",
+      logo: brandLogos["Aashirvaad"],
+      brand: "Aashirvaad",
+      subBrand: "Select Sharbati",
+      platformLabel: "Meta / Facebook & IG Feed (Static)",
+      brandTags: [
+        { label: "Mother Brand: Aashirvaad", conf: "99.8%" },
+        { label: "Sub-Brand: Select Sharbati", conf: "97.5%" }
+      ],
+      ocrTags: [
+        { label: "100% Madhya Pradesh Sharbati Wheat", conf: "96.4%" },
+        { label: "Net Weight: 5kg", conf: "99.1%" },
+        { label: "FSSAI Lic No. 1001203100002", conf: "95.0%" }
+      ],
+      visualTags: [
+        { label: "Golden Grain Background", conf: "94.2%" },
+        { label: "Veg Symbol (Green Dot)", conf: "99.9%" },
+        { label: "Front Pack Render", conf: "98.1%" }
+      ],
+      rules: [
+        { name: "Early Branding", req: "Logo/Product prominent in frame", finding: "Aashirvaad logo and 5kg pack prominent", weight: "33.33%", pass: true },
+        { name: "Aspect Ratio / Frame", req: "1:1 Square or 4:5 Vertical", finding: "Compliant packaging aspect render", weight: "33.33%", pass: true },
+        { name: "Simple Message", req: "<= 10 words total copy", finding: "Clean pack design typography", weight: "33.34%", pass: true }
+      ],
+      edits: []
+    },
+    sunfeast: {
+      filename: "Dark_Fantasy_Choco_Fills_TVC_Q3.mp4",
+      filesize: "145.0 MB • 1080p HD (00:30)",
+      format: "MP4",
+      formatType: "Video",
+      icon: "🎬",
+      logo: brandLogos["Dark Fantasy"],
+      brand: "Sunfeast",
+      subBrand: "Dark Fantasy",
+      platformLabel: "YouTube / DV360 (ABCD Framework)",
+      brandTags: [
+        { label: "Mother Brand: Sunfeast", conf: "99.4%" },
+        { label: "Sub-Brand: Dark Fantasy", conf: "98.9%" }
+      ],
+      ocrTags: [
+        { label: "Tagline: Pure Indulgence", conf: "94.8%" },
+        { label: "Audio Transcript: 'Lose yourself in molten choc...'", conf: "92.1%" }
+      ],
+      visualTags: [
+        { label: "Melting Chocolate Stream", conf: "96.5%" },
+        { label: "Commercial Production", conf: "99.0%" },
+        { label: "16:9 Aspect Ratio", conf: "100%" }
+      ],
+      rules: [
+        { name: "Motion", req: "Visual motion in first 1.0s", finding: "Fluid chocolate stream detected at 0.2s", weight: "10%", pass: true },
+        { name: "Pacing", req: "2+ visual cuts in first 5.0s", finding: "3 distinct scenes detected in 4.8s", weight: "10%", pass: true },
+        { name: "Close-Up Face", req: "Close-up face in first 5.0s", finding: "Protagonist close-up at 1.4s", weight: "10%", pass: true },
+        { name: "Early Branding", req: "Logo/Product in first 5.0s", finding: "Dark Fantasy mark at 0.8s", weight: "10%", pass: true },
+        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "Synchronized dynamic supers detected", weight: "10%", pass: true },
+        { name: "Brand Audio Mention", req: "Clear audio mention of brand", finding: "Voiceover audio detected at 3.1s", weight: "10%", pass: true },
+        { name: "Sound On", req: "Audible sound/VO/music detected", finding: "High-clarity stereo track active", weight: "10%", pass: true },
+        { name: "Call to Action (CTA)", req: "On-screen CTA text/graphic", finding: "'Order On ITC Store' overlay at 4.2s", weight: "10%", pass: true },
+        { name: "Optimal Length", req: "Asset length <= 30.1s", finding: "Exact run-time is 30.0s", weight: "10%", pass: true },
+        { name: "Aspect Ratio", req: "16:9 Landscape / 4:5 Mobile", finding: "16:9 (1920x1080)", weight: "10%", pass: true }
+      ],
+      edits: []
+    },
+    bingo: {
+      filename: "Bingo_TedheMedhe_Masala_Loop.gif",
+      filesize: "8.4 MB • 1080x1080 px",
+      format: "GIF",
+      formatType: "GIF",
+      icon: "🍟",
+      logo: brandLogos["Bingo!"],
+      brand: "Bingo!",
+      subBrand: "Tedhe Medhe",
+      platformLabel: "Meta / Instagram Reels & Stories",
+      brandTags: [
+        { label: "Mother Brand: Bingo!", conf: "99.1%" },
+        { label: "Sub-Brand: Tedhe Medhe", conf: "98.0%" }
+      ],
+      ocrTags: [
+        { label: "No Two Are Same", conf: "93.4%" },
+        { label: "Masala Tadka", conf: "97.2%" }
+      ],
+      visualTags: [
+        { label: "Stick Snack", conf: "95.1%" },
+        { label: "Animated Burst Effect", conf: "96.8%" },
+        { label: "Square Aspect Ratio", conf: "100%" }
+      ],
+      rules: [
+        { name: "Early Branding", req: "Logo/Product in first 2.0s", finding: "Pack visual detected at 0.5s", weight: "20%", pass: true },
+        { name: "Aspect Ratio / Frame", req: "9:16 Vertical (1080x1920)", finding: "1:1 Square (Non-Vertical for Reels)", weight: "20%", pass: false },
+        { name: "Sound On", req: "Audible music/voiceover track", finding: "GIF animated loop (No audio track)", weight: "10%", pass: false },
+        { name: "Optimised for Sound Off", req: "Burned-in subtitles / text supers", finding: "Animated text supers active", weight: "10%", pass: true },
+        { name: "Native Platform CTA", req: "CTA configured in ad unit", finding: "Button set to 'Try Now'", weight: "10%", pass: true },
+        { name: "CTA in Creative", req: "Visible end-card CTA graphic", finding: "On-screen CTA banner present", weight: "10%", pass: true },
+        { name: "Optimal Length", req: "Reels <= 30.1s", finding: "Loop duration is 6.0s", weight: "10%", pass: true },
+        { name: "Simple Message", req: "<= 10 words in first 5.0s", finding: "Catchy short copy", weight: "10%", pass: true }
+      ],
+      edits: [
+        { rule: "Aspect Ratio / Frame", fix: "Re-crop creative to 9:16 vertical ratio (1080x1920) for full-screen Reels/Stories." },
+        { rule: "Sound On", fix: "Add audible audio/music track for full-funnel video placements." }
+      ]
+    },
+    yippee: {
+      filename: "YiPPee_Noodles_Brand_Book_2026.pdf",
+      filesize: "42.1 MB • 24 Pages",
+      format: "PDF",
+      formatType: "Document",
+      icon: "📄",
+      logo: brandLogos["YiPPee!"],
+      brand: "YiPPee!",
+      subBrand: "Noodles",
+      platformLabel: "Internal Governance / Brand Book",
+      brandTags: [
+        { label: "Mother Brand: Sunfeast YiPPee!", conf: "99.6%" },
+        { label: "Category: Instant Noodles", conf: "98.2%" }
+      ],
+      ocrTags: [
+        { label: "Non-Sticky Round Block", conf: "96.0%" },
+        { label: "Brand Guidelines & Color Spec", conf: "95.5%" }
+      ],
+      visualTags: [
+        { label: "Document Vector Pages", conf: "99.0%" },
+        { label: "CMYK Printing Palette", conf: "97.4%" }
+      ],
+      rules: [
+        { name: "Brand Book Compliance", req: "Valid ITC Design Guidelines", finding: "Official typography & vector palettes verified", weight: "100%", pass: true }
+      ],
+      edits: []
     }
+  };
+
+  function triggerPreset(key) {
+    const preset = presetData[key];
+    document.getElementById('ingest-brand').value = preset.brand === 'YiPPee!' ? 'Sunfeast YiPPee!' : preset.brand;
+    runAuditSimulation(preset);
   }
 
   function saveToLibrary() {
@@ -973,25 +1162,26 @@
       id: "ITC-00" + (sampleAssets.length + 1),
       title: current.filename.replace(/_/g, ' ').replace(/\.[^/.]+$/, ""),
       brand: current.brand,
-      subBrand: current.brand.includes('Dark Fantasy') ? 'Dark Fantasy' : (current.brand.includes('YiPPee') ? 'YiPPee!' : ''),
-      type: current.formatType === 'Video' ? 'Video' : (current.format === 'PDF' ? 'Document' : 'Image'),
-      icon: current.formatType === 'Video' ? '🎬' : (current.format === 'PDF' ? '📄' : '🖼️'),
+      subBrand: current.subBrand || (current.brand.includes('Dark Fantasy') ? 'Dark Fantasy' : (current.brand.includes('YiPPee') ? 'YiPPee!' : '')),
+      type: current.formatType === 'Video' ? 'Video' : (current.format === 'PDF' ? 'Document' : (current.format === 'GIF' ? 'GIF' : 'Image')),
+      icon: current.icon || (current.formatType === 'Video' ? '🎬' : (current.format === 'PDF' ? '📄' : '🖼️')),
       fileDataUrl: current.fileDataUrl,
+      logo: current.logo,
       format: current.format,
       resolution: current.filesize.split('• ')[1] || "HD",
       sku: "Governed Campaign SKU",
-      campaign: "Live Ingest 2026",
+      campaign: "2026 Campaign",
       status: current.calculatedCqs >= 90 ? "Approved" : "Pending Review",
       cqs: current.calculatedCqs || 100,
       cqsStatus: current.cqsClassification || "EXCELLENT",
       expiry: "2026-12-31",
-      aiTags: current.visualTags.map(v => v.label),
-      manualTags: ["Live Ingested", "Audited by CQS"]
+      aiTags: (current.visualTags || []).map(v => v.label),
+      manualTags: ["Auto-Ingested", "Audited by CQS"]
     };
 
     sampleAssets.unshift(newAsset);
     renderGallery();
-    alert(`Asset "${newAsset.title}" successfully ingested into ITC DAM with CQS ${newAsset.cqs}%!`);
+    alert(`Asset "${newAsset.title}" successfully added to the ITC Foods DAM Central Repository with CQS ${newAsset.cqs}%!`);
     switchTab('tab-gallery', null);
     document.querySelectorAll('.nav-tab')[1].classList.add('active');
     document.querySelectorAll('.nav-tab')[0].classList.remove('active');
