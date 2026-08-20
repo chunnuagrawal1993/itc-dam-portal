@@ -41,7 +41,14 @@
     padding: 40px 32px;
     text-align: center;
   }
-  .login-logo { width: 120px; height: auto; margin: 0 auto 16px auto; display: block; object-fit: contain; }
+  .login-logo-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 16px;
+    min-height: 90px;
+  }
+  .login-logo { width: 130px; height: auto; max-height: 95px; object-fit: contain; }
   .login-title { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
   .login-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
   .auth-form-group { text-align: left; margin-bottom: 18px; }
@@ -68,7 +75,7 @@
     z-index: 1000;
   }
   .logo-container { display: flex; align-items: center; gap: 14px; }
-  .itc-header-logo { width: 44px; height: 36px; background: #fff; border-radius: 4px; padding: 2px; object-fit: contain; }
+  .itc-header-logo { width: 44px; height: 38px; background: #fff; border-radius: 4px; padding: 2px; object-fit: contain; }
   .app-title { font-size: 17px; font-weight: 600; }
   .header-actions { display: flex; align-items: center; gap: 12px; }
   .user-profile { display: flex; align-items: center; gap: 8px; font-size: 13px; background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; }
@@ -169,7 +176,10 @@
 <!-- AUTHENTICATION SCREEN -->
 <div id="auth-container">
   <div class="login-card">
-    <img class="login-logo" src="ITC-Logo.jpg" alt="ITC Logo">
+    <div class="login-logo-wrapper">
+      <img class="login-logo" src="./ITC-Logo.jpg" alt="ITC Logo" 
+           onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/ITC_Limited_Logo.svg/512px-ITC_Limited_Logo.svg.png';">
+    </div>
 
     <div class="login-title">ITC Foods DAM Portal</div>
     <div class="login-subtitle">Digital Asset Management & Compliance Platform</div>
@@ -200,7 +210,8 @@
 <div id="dam-portal">
   <header>
     <div class="logo-container">
-      <img class="itc-header-logo" src="ITC-Logo.jpg" alt="ITC Logo">
+      <img class="itc-header-logo" src="./ITC-Logo.jpg" alt="ITC Logo"
+           onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/ITC_Limited_Logo.svg/512px-ITC_Limited_Logo.svg.png';">
       <span class="app-title">Dynamic Digital Asset Management & Creative Compliance</span>
     </div>
     <div class="header-actions">
@@ -825,7 +836,7 @@
     sampleAssets.unshift(newAsset);
     renderGallery();
     alert(`Asset successfully ingested with CQS ${newAsset.cqs}%!`);
-    switchTab('tab-gallery');
+    switchTab('tab-gallery', null);
     document.querySelectorAll('.nav-tab')[1].classList.add('active');
     document.querySelectorAll('.nav-tab')[0].classList.remove('active');
   }
