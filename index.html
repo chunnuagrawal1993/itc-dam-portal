@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ITC Foods — Dynamic DAM & Creative Compliance Agent</title>
+<style>
+  :root {
+    --primary: #003366;
+    --primary-dark: #002244;
+    --accent: #d4af37;
+    --accent-hover: #b89628;
+    --bg-main: #f4f6f9;
+    --bg-card: #ffffff;
+    --text-main: #212529;
+    --text-muted: #6c757d;
+    --border: #dee2e6;
+    --success: #198754;
+    --warning: #eab308;
+    --danger: #dc3545;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  body { background-color: var(--bg-main); color: var(--text-main); font-size: 14px; line-height: 1.5; min-height: 100vh; }
+
+  /* Auth Screen */
+  #auth-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #002244 0%, #003366 50%, #001830 100%);
+    padding: 20px;
+  }
+  .login-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 32px;
+    text-align: center;
+  }
+  .login-logo { width: 110px; margin-bottom: 16px; }
+  .login-title { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+  .login-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+  .auth-form-group { text-align: left; margin-bottom: 18px; }
+  .auth-label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+  .auth-input { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none; }
+  .auth-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15); }
+  .btn-block { width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 6px; background: var(--primary); color: white; border: none; cursor: pointer; margin-top: 10px; }
+  .btn-block:hover { background: var(--primary-dark); }
+  .login-error { background: #fee2e2; border: 1px solid #f87171; color: #b91c1c; font-size: 12px; padding: 8px; border-radius: 6px; margin-bottom: 16px; display: none; }
+  .demo-creds { margin-top: 20px; padding: 12px; background: #f8fafc; border: 1px dashed var(--border); border-radius: 6px; font-size: 11px; color: var(--text-muted); }
+
+  /* DAM App */
+  #dam-portal { display: none; }
+  header {
+    background-color: var(--primary);
+    color: white;
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  .logo-container { display: flex; align-items: center; gap: 14px; }
+  .itc-header-logo { width: 44px; background: #fff; border-radius: 4px; padding: 3px; }
+  .app-title { font-size: 17px; font-weight: 600; }
+  .header-actions { display: flex; align-items: center; gap: 12px; }
+  .user-profile { display: flex; align-items: center; gap: 8px; font-size: 13px; background: rgba(255,255,255,0.1); padding: 6px 12px; border-radius: 20px; }
+  .avatar { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: var(--primary-dark); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; }
+  .btn-logout { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 6px 12px; font-size: 12px; border-radius: 20px; cursor: pointer; }
+  .btn-logout:hover { background: rgba(220, 53, 69, 0.8); }
+
+  nav.main-nav { background: white; border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 24px; }
+  .nav-tab { padding: 14px 4px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.2s; }
+  .nav-tab:hover { color: var(--primary); }
+  .nav-tab.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+  .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .card { background: white; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px; }
+  .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #f0f0f0; }
+  .card-title { font-size: 16px; font-weight: 600; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+
+  .upload-area { border: 2px dashed #00336640; border-radius: 8px; padding: 28px; text-align: center; background: #f8fafc; cursor: pointer; transition: all 0.2s; }
+  .upload-area:hover { border-color: var(--primary); background: #f0f4f8; }
+  .upload-icon { font-size: 32px; color: var(--primary); margin-bottom: 8px; }
+  .preset-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
+  .preset-brand-logo { width: 22px; height: 22px; object-fit: contain; vertical-align: middle; margin-right: 6px; }
+  
+  .btn { padding: 8px 16px; border-radius: 6px; border: 1px solid var(--border); background: white; cursor: pointer; font-weight: 500; transition: all 0.2s; font-size: 13px; }
+  .btn:hover { background: #f8f9fa; }
+  .btn-primary { background: var(--primary); color: white; border-color: var(--primary); }
+  .btn-primary:hover { background: var(--primary-dark); }
+  .btn-accent { background: var(--accent); color: var(--primary-dark); border-color: var(--accent); font-weight: 600; }
+  .btn-accent:hover { background: var(--accent-hover); }
+
+  .scan-progress-box { display: none; margin-top: 20px; background: #eef4fc; border: 1px solid #b6d4fe; border-radius: 6px; padding: 16px; }
+  .progress-bar-container { background: #cbd5e1; height: 10px; border-radius: 5px; overflow: hidden; margin: 10px 0; }
+  .progress-bar { background: var(--primary); height: 100%; width: 0%; transition: width 0.3s; }
+  
+  .ai-results-grid { display: grid; grid-template-columns: 280px 1fr; gap: 20px; margin-top: 20px; display: none; }
+  .asset-preview-card { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; background: #fafafa; }
+  .asset-preview-media { width: 100%; height: 200px; object-fit: cover; background: #f8fafc; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; position: relative; }
+  .asset-preview-logo { max-width: 78%; max-height: 70%; object-fit: contain; }
+  .format-badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+
+  .tag-group { margin-bottom: 12px; }
+  .tag-group-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { background: #e2e8f0; color: #334155; padding: 3px 8px; border-radius: 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 4px; }
+  .tag-ai { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
+  .tag-confidence { font-size: 9px; background: #0284c7; color: white; padding: 1px 4px; border-radius: 8px; }
+
+  /* Creative Compliance Report Styling */
+  .cqs-report-card {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    margin-top: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+  .cqs-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+  }
+  .cqs-score-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cqs-excellent { background: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+  .cqs-needs-work { background: #fef9c3; color: #a16207; border: 1px solid #fde047; }
+  .cqs-failed { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+
+  .cqs-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  .cqs-table th, .cqs-table td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
+  .cqs-table th { background: #f8fafc; font-weight: 600; color: var(--primary); }
+  
+  .filter-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; align-items: center; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); }
+  .search-input { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+  .select-filter { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; font-size: 13px; }
+
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+  .gallery-card { border: 1px solid var(--border); border-radius: 8px; background: white; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+  .gallery-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  .gallery-thumb { width: 100%; height: 140px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); display: flex; align-items: center; justify-content: center; font-size: 32px; color: #64748b; position: relative; padding: 18px; }
+  .brand-logo { width: 78%; height: 82%; object-fit: contain; }
+  .gallery-info { padding: 12px; }
+  .gallery-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .gallery-brand { font-size: 11px; color: var(--primary); font-weight: 600; text-transform: uppercase; }
+  .gallery-meta { font-size: 11px; color: var(--text-muted); display: flex; justify-content: space-between; margin-top: 8px; }
+
+  .status-badge { font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 4px; text-transform: uppercase; }
+  .status-approved { background: #d1e7dd; color: #0f5132; }
+  .status-pending { background: #fff3cd; color: #664d03; }
+  .status-rejected { background: #f8d7da; color: #842029; }
+
+  .modal-overlay { display: none; position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: white; border-radius: 8px; width: 950px; max-width: 95vw; max-height: 90vh; overflow-y: auto; display: grid; grid-template-columns: 320px 1fr; border: 1px solid var(--border); }
+  .modal-left { background: #f8fafc; padding: 20px; border-right: 1px solid var(--border); }
+  .modal-right { padding: 24px; }
+  .form-group { margin-bottom: 12px; }
+  .form-label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+  .form-control { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+
+  .tree-node { margin-left: 16px; margin-top: 8px; border-left: 2px solid #e2e8f0; padding-left: 12px; }
+  .tree-title { font-weight: 600; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 0; }
+  .taxonomy-brand-logo { width: 54px; height: 26px; object-fit: contain; }
+  .tree-leaf { font-weight: normal; color: #475569; font-size: 13px; margin-top: 4px; display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 6px 10px; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- AUTHENTICATION SCREEN -->
+<div id="auth-container">
+  <div class="login-card">
+    <img class="login-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/ITC_Limited_Logo.svg/512px-ITC_Limited_Logo.svg.png" alt="ITC Logo">
+    <div class="login-title">ITC Foods DAM Portal</div>
+    <div class="login-subtitle">Digital Asset Management & Compliance Platform</div>
+
+    <div class="login-error" id="login-error">Please enter valid credentials.</div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="auth-form-group">
+        <label class="auth-label">Username / Corporate ID</label>
+        <input type="text" id="username" class="auth-input" placeholder="e.g. brandmanager" required autocomplete="username">
+      </div>
+      <div class="auth-form-group">
+        <label class="auth-label">Password</label>
+        <input type="password" id="password" class="auth-input" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn-block">Sign In</button>
+    </form>
+
+    <div class="demo-creds">
+      <strong>Demo Credentials:</strong><br>
+      Username: <code>admin</code> | Password: <code>itcfoods2026</code><br>
+      <em>(Accepts any corporate email/password format)</em>
+    </div>
+  </div>
+</div>
+
+<!-- DAM PORTAL -->
+<div id="dam-portal">
+  <header>
+    <div class="logo-container">
+      <img class="itc-header-logo" alt="ITC Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/ITC_Limited_Logo.svg/512px-ITC_Limited_Logo.svg.png">
+      <span class="app-title">Dynamic Digital Asset Management & Creative Compliance</span>
+    </div>
+    <div class="header-actions">
+      <div class="user-profile">
+        <div class="avatar" id="user-avatar">BM</div>
+        <span id="user-display-name">Brand Manager</span>
+      </div>
+      <button class="btn-logout" onclick="handleLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <nav class="main-nav">
+    <div class="nav-tab active" onclick="switchTab('tab-upload', event)">1. Ingestion & Creative Quality Agent</div>
+    <div class="nav-tab" onclick="switchTab('tab-gallery', event)">2. Asset Library & Governance</div>
+    <div class="nav-tab" onclick="switchTab('tab-taxonomy', event)">3. Brand Hierarchy</div>
+  </nav>
+
+  <div class="container">
+    <!-- TAB 1: UPLOAD & CQS ADJUDICATION -->
+    <div id="tab-upload" class="tab-content active">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Media Ingestion & Adjudication Framework Pipeline</div>
+          <span style="font-size: 12px; color: var(--text-muted);">Enforces YouTube ABCD & Meta Brilliant Basics Rulebooks</span>
+        </div>
+
+        <div class="upload-area" id="drop-zone" onclick="triggerPreset('sunfeast')">
+          <div class="upload-icon">⚡</div>
+          <h3>Simulate Asset Audit & Creative Quality Scoring</h3>
+          <p style="color: var(--text-muted); margin-top: 4px;">Click any sample digital campaign creative below to execute real-time CQS audit:</p>
+
+          <div class="preset-buttons">
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('sunfeast')"><img class="preset-brand-logo" alt="" src="https://seeklogo.com/images/S/sunfeast-dark-fantasy-logo-6A34432B80-seeklogo.com.png">Dark Fantasy Video (YouTube Bumper)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('bingo')"><img class="preset-brand-logo" alt="" src="https://media.potatopro.com/bingo-1600x785.jpg">Bingo! Video (Instagram Reel - Needs Work)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('aashirvaad')"><img class="preset-brand-logo" alt="" src="https://pimwp.s3-accelerate.amazonaws.com/2021/08/Aashirwad-logo.png">Aashirvaad Static (Facebook Feed - Passed)</button>
+            <button class="btn" onclick="event.stopPropagation(); triggerPreset('yippee')"><img class="preset-brand-logo" alt="" src="https://prithvienterprises.co.in/cdn/shop/collections/Yippee.png?v=1750442416">YiPPee! Brand Guide PDF</button>
+          </div>
+        </div>
+
+        <!-- Scanning Simulator Progress -->
+        <div class="scan-progress-box" id="scan-box">
+          <div style="display: flex; justify-content: space-between; font-weight: 600; font-size: 13px;">
+            <span id="scan-status-text">Adjudication AI Agent auditing creative compliance...</span>
+            <span id="scan-percentage">0%</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+          <div style="font-size: 12px; color: var(--text-muted);" id="scan-step-detail">Evaluating early branding timestamp and aspect ratio...</div>
+        </div>
+
+        <!-- AI Auto-Tagging & CQS Results -->
+        <div class="ai-results-grid" id="ai-results">
+          <div class="asset-preview-card">
+            <div class="asset-preview-media" id="preview-media-box">
+              <span id="preview-icon">🎬</span>
+              <span class="format-badge" id="preview-format">MP4</span>
+            </div>
+            <div style="padding: 12px;">
+              <div style="font-weight: 700; font-size: 14px;" id="res-filename">Dark_Fantasy_Choco_Fills_TVC.mp4</div>
+              <div style="font-size: 12px; color: var(--text-muted);" id="res-filesize">145 MB • 1080p HD (00:15)</div>
+            </div>
+          </div>
+
+          <div>
+            <div style="background: #f8fafc; border: 1px solid var(--border); padding: 14px; border-radius: 6px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong>Platform Ingestion: <span id="res-platform-tag" style="color: var(--primary);">YouTube Bumper</span></strong>
+                <div style="font-size: 12px; color: var(--text-muted);">Threshold benchmark for Go-Live approval is ≥90% CQS.</div>
+              </div>
+              <button class="btn btn-accent" id="btn-push-library" onclick="saveToLibrary()">Approve & Push to Asset Library</button>
+            </div>
+
+            <div class="tag-group">
+              <div class="tag-group-label">Detected Visual & OCR Entities</div>
+              <div class="tag-cloud" id="res-visual-tags"></div>
+            </div>
+
+            <!-- Adjudication AI Report Output -->
+            <div class="cqs-report-card" id="cqs-report-container">
+              <!-- Rendered via JavaScript -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: ASSET GALLERY -->
+    <div id="tab-gallery" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">ITC Foods Central Digital Asset Library</div>
+          <div><span style="font-size: 12px; color: var(--text-muted);">Total Assets: <strong id="asset-count">6</strong></span></div>
+        </div>
+
+        <div class="filter-bar">
+          <input type="text" class="search-input" id="search-input" placeholder="Search by brand, SKU, campaign, keyword..." onkeyup="filterAssets()">
+          <select class="select-filter" id="filter-brand" onchange="filterAssets()">
+            <option value="">All Mother Brands</option>
+            <option value="Aashirvaad">Aashirvaad</option>
+            <option value="Sunfeast">Sunfeast</option>
+            <option value="Bingo!">Bingo!</option>
+            <option value="YiPPee!">YiPPee!</option>
+            <option value="Fabelle">Fabelle</option>
+            <option value="B Natural">B Natural</option>
+          </select>
+          <select class="select-filter" id="filter-cqs" onchange="filterAssets()">
+            <option value="">All CQS Scores</option>
+            <option value="EXCELLENT">🟢 Approved (≥90%)</option>
+            <option value="NEEDS WORK">🟡 Needs Work (70-89%)</option>
+            <option value="OFF TRACK">🔴 Off Track (&lt;70%)</option>
+          </select>
+        </div>
+
+        <div class="gallery-grid" id="gallery-container"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: BRAND TAXONOMY -->
+    <div id="tab-taxonomy" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">ITC Foods Organizational Taxonomy & Brand Portfolio Architecture</div>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 16px;">This hierarchy enforces standard folder governance, tagging rules, and access control across all uploaded assets.</p>
+        <div id="taxonomy-tree"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- METADATA EDITING MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <div class="modal-left">
+      <div class="asset-preview-media" id="modal-media-preview" style="height: 160px; border-radius: 6px;"></div>
+      <div style="margin-top: 14px;">
+        <h4 id="modal-asset-title">Asset Title</h4>
+        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;" id="modal-asset-id">ID: ITC-DAM-2026-001</div>
+      </div>
+      <hr style="margin: 14px 0; border: none; border-top: 1px solid var(--border);">
+      <div class="tag-group">
+        <div class="tag-group-label">Creative Quality Score</div>
+        <div id="modal-cqs-pill" style="margin-top: 6px;"></div>
+      </div>
+      <div class="tag-group" style="margin-top: 14px;">
+        <div class="tag-group-label">AI Tags</div>
+        <div class="tag-cloud" id="modal-ai-tags"></div>
+      </div>
+    </div>
+
+    <div class="modal-right">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h3 style="color: var(--primary);">Metadata & Compliance Governance</h3>
+        <button class="btn" onclick="closeModal()">✕ Close</button>
+      </div>
+
+      <form id="metadata-form" onsubmit="saveMetadata(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Mother Brand *</label>
+            <select class="form-control" id="form-mother-brand" required>
+              <option value="Aashirvaad">Aashirvaad</option>
+              <option value="Sunfeast">Sunfeast</option>
+              <option value="Bingo!">Bingo!</option>
+              <option value="YiPPee!">YiPPee!</option>
+              <option value="Fabelle">Fabelle</option>
+              <option value="B Natural">B Natural</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sub-Brand / Product Line</label>
+            <input type="text" class="form-control" id="form-sub-brand">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">SKU / Variant Name</label>
+            <input type="text" class="form-control" id="form-sku">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Campaign Name</label>
+            <input type="text" class="form-control" id="form-campaign">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Compliance Approval Status</label>
+            <select class="form-control" id="form-status">
+              <option value="Approved">Approved for Distribution</option>
+              <option value="Pending Review">Pending Brand Governance</option>
+              <option value="Rejected">Rejected (CQS Failed)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Usage Rights Expiry Date</label>
+            <input type="date" class="form-control" id="form-expiry">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Manual Keyword Tags</label>
+          <input type="text" class="form-control" id="form-manual-tags">
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+          <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Asset Metadata</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // --- AUTHENTICATION ---
+  function handleLogin(e) {
+    e.preventDefault();
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    if (user.length > 0 && pass.length > 0) {
+      sessionStorage.setItem('itc_dam_auth', 'true');
+      sessionStorage.setItem('itc_dam_user', user);
+      showDashboard(user);
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  function handleLogout() {
+    sessionStorage.removeItem('itc_dam_auth');
+    sessionStorage.removeItem('itc_dam_user');
+    document.getElementById('dam-portal').style.display = 'none';
+    document.getElementById('auth-container').style.display = 'flex';
+  }
+
+  function showDashboard(username) {
+    document.getElementById('auth-container').style.display = 'none';
+    document.getElementById('dam-portal').style.display = 'block';
+    const avatar = username ? username.substring(0, 2).toUpperCase() : 'BM';
+    document.getElementById('user-avatar').innerText = avatar;
+    document.getElementById('user-display-name').innerText = `${username} (ITC Brand Team)`;
+  }
+
+  // --- BRAND LOGOS & TAXONOMY ---
+  const brandLogos = {
+    "Aashirvaad": "https://pimwp.s3-accelerate.amazonaws.com/2021/08/Aashirwad-logo.png",
+    "Dark Fantasy": "https://seeklogo.com/images/S/sunfeast-dark-fantasy-logo-6A34432B80-seeklogo.com.png",
+    "Sunfeast Dark Fantasy": "https://seeklogo.com/images/S/sunfeast-dark-fantasy-logo-6A34432B80-seeklogo.com.png",
+    "Bingo!": "https://media.potatopro.com/bingo-1600x785.jpg",
+    "YiPPee!": "https://prithvienterprises.co.in/cdn/shop/collections/Yippee.png?v=1750442416",
+    "Sunfeast YiPPee!": "https://prithvienterprises.co.in/cdn/shop/collections/Yippee.png?v=1750442416",
+    "B Natural": "https://cdn.prod.website-files.com/67527efee6d7b5cd0893a8ef/68468b67affe1adbd0c01e0e_B_Natural_New.webp"
+  };
+
+  function brandLogoMarkup(item, className = "brand-logo") {
+    const url = brandLogos[item.subBrand] || brandLogos[item.brand] || "";
+    return url ? `<img class="${className}" src="${url}" alt="logo">` : item.icon;
+  }
+
+  const taxonomyData = [
+    {
+      category: "1. Staples & Culinary Essentials",
+      brands: [
+        { name: "Aashirvaad", variants: ["Atta (Chakki, Multigrain, Select)", "Salt", "Spices", "Organic Range", "Ghee"] }
+      ]
+    },
+    {
+      category: "2. Biscuits, Cookies & Cakes",
+      brands: [
+        { name: "Sunfeast Dark Fantasy", variants: ["Choco Fills", "Choco Meltz", "Bourbon"] },
+        { name: "Sunfeast Mom's Magic", variants: ["Butter", "Cashew & Almond"] }
+      ]
+    },
+    {
+      category: "3. Snacks & Savories",
+      brands: [
+        { name: "Bingo!", variants: ["Tedhe Medhe", "Mad Angles", "Potato Chips"] }
+      ]
+    },
+    {
+      category: "4. Instant Noodles & Pasta",
+      brands: [
+        { name: "Sunfeast YiPPee!", variants: ["Magic Masala Noodles", "Tricolor Pasta"] }
+      ]
+    }
+  ];
+
+  // --- INITIAL REPOSITORY ---
+  let sampleAssets = [
+    {
+      id: "ITC-001",
+      title: "Dark Fantasy Pure Indulgence TVC",
+      brand: "Sunfeast",
+      subBrand: "Dark Fantasy",
+      type: "Video",
+      icon: "🎬",
+      format: "MP4",
+      resolution: "1080p H264",
+      sku: "Choco Fills",
+      campaign: "Har Bite Mein Licious",
+      status: "Approved",
+      cqs: 100,
+      cqsStatus: "EXCELLENT",
+      expiry: "2026-12-31",
+      aiTags: ["Early Brand 0.8s", "Aspect 16:9", "Audio Mention", "Subtitles/Supers"],
+      manualTags: ["TVC", "National"]
+    },
+    {
+      id: "ITC-002",
+      title: "Bingo Tedhe Medhe Masala Tadka Reel",
+      brand: "Bingo!",
+      subBrand: "Tedhe Medhe",
+      type: "Video",
+      icon: "🍟",
+      format: "MP4",
+      resolution: "1080x1920",
+      sku: "Rs 10 Pack",
+      campaign: "Eat Phir Repeat",
+      status: "Pending Review",
+      cqs: 70,
+      cqsStatus: "NEEDS WORK",
+      expiry: "2026-11-15",
+      aiTags: ["Missing Audio Mention", "Fast Cuts", "Square Frame"],
+      manualTags: ["Instagram Reel"]
+    },
+    {
+      id: "ITC-003",
+      title: "Aashirvaad Shuddha Chakki Atta Feed Static",
+      brand: "Aashirvaad",
+      subBrand: "Atta",
+      type: "Image",
+      icon: "🌾",
+      format: "JPG",
+      resolution: "1080x1080",
+      sku: "10kg Pack",
+      campaign: "4-Step Advantage",
+      status: "Approved",
+      cqs: 100,
+      cqsStatus: "EXCELLENT",
+      expiry: "2026-12-31",
+      aiTags: ["Logo in Frame", "Aspect 1:1", "Simple Message <10 Words"],
+      manualTags: ["Meta Feed"]
+    }
+  ];
+
+  // --- PRESET AUDIT DATASETS FOR SCORING AGENT ---
+  const presetAudits = {
+    sunfeast: {
+      filename: "Dark_Fantasy_Choco_Fills_Bumper.mp4",
+      filesize: "32 MB • 1920x1080 (00:06)",
+      format: "MP4",
+      icon: "🎬",
+      logo: brandLogos["Dark Fantasy"],
+      brand: "Sunfeast",
+      subBrand: "Dark Fantasy",
+      platform: "YouTube / Bumper (ABCD)",
+      formatType: "Video",
+      visualTags: [
+        { label: "Detected Logo at 0.8s", conf: "99.8%" },
+        { label: "Voiceover: 'Sunfeast Dark Fantasy'", conf: "98.2%" },
+        { label: "On-Screen CTA: 'Buy Now'", conf: "96.5%" },
+        { label: "Aspect Ratio: 16:9", conf: "100%" }
+      ],
+      rules: [
+        { name: "Motion", req: "Visual motion in first 1.0s", finding: "Fluid chocolate stream detected at 0.2s", weight: "10%", pass: true },
+        { name: "Pacing", req: "2+ visual cuts in first 5.0s", finding: "3 distinct scenes detected in 4.8s", weight: "10%", pass: true },
+        { name: "Close-Up Face", req: "Close-up face in first 5.0s", finding: "Protagonist close-up at 1.4s", weight: "10%", pass: true },
+        { name: "Early Branding", req: "Logo/Product in first 2.0s (Bumper)", finding: "Dark Fantasy mark at 0.8s", weight: "10%", pass: true },
+        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "Synchronized dynamic supers detected", weight: "10%", pass: true },
+        { name: "Brand Audio Mention", req: "Clear audio mention of brand", finding: "Voiceover audio detected at 3.1s", weight: "10%", pass: true },
+        { name: "Sound On", req: "Audible sound/VO/music detected", finding: "High-clarity stereo track active", weight: "10%", pass: true },
+        { name: "Call to Action (CTA)", req: "On-screen CTA text/graphic", finding: "'Order On ITC Store' overlay at 4.2s", weight: "10%", pass: true },
+        { name: "Optimal Length", req: "Asset length <= 30.1s", finding: "Exact run-time is 6.0s", weight: "10%", pass: true },
+        { name: "Aspect Ratio", req: "16:9 Landscape / 4:5 Mobile", finding: "16:9 (1920x1080)", weight: "10%", pass: true }
+      ],
+      edits: [],
+      escalation: "None required. Asset fully compliant with YouTube ABCD ruleset."
+    },
+    bingo: {
+      filename: "Bingo_TedheMedhe_Instagram_Reel.mp4",
+      filesize: "48 MB • 1080x1920 (00:18)",
+      format: "MP4",
+      icon: "🍟",
+      logo: brandLogos["Bingo!"],
+      brand: "Bingo!",
+      subBrand: "Tedhe Medhe",
+      platform: "Meta / Instagram Reels",
+      formatType: "Video",
+      visualTags: [
+        { label: "Pack Visual at 0.5s", conf: "99.1%" },
+        { label: "Aspect Ratio: 9:16", conf: "100%" },
+        { label: "Missing In-Frame CTA", conf: "95.0%" },
+        { label: "No Subtitles Detected", conf: "97.4%" }
+      ],
+      rules: [
+        { name: "Early Branding", req: "Logo/Product visual in first 2.0s", finding: "Pack visual detected at 0.5s", weight: "20%", pass: true },
+        { name: "Aspect Ratio / Frame", req: "Vertical 9:16 or 4:5 for Reels", finding: "9:16 Vertical (1080x1920)", weight: "20%", pass: true },
+        { name: "Sound On", req: "Audible background track/audio", finding: "Upbeat music audio track active", weight: "10%", pass: true },
+        { name: "Optimised for Sound Off", req: "Subtitles/Supers present throughout", finding: "No speech subtitles or supers detected", weight: "10%", pass: false },
+        { name: "Native Platform CTA", req: "CTA configured in ad settings", finding: "Pre-set to 'Shop Now'", weight: "10%", pass: true },
+        { name: "CTA in Creative", req: "Visible CTA text inside video frame", finding: "No closing end-card CTA graphic", weight: "10%", pass: false },
+        { name: "Optimal Length", req: "Reels <= 30.1s", finding: "18.0s runtime", weight: "10%", pass: true },
+        { name: "Simple Message", req: "<= 10 words in first 5.0s", finding: "Clean intro frame (4 words)", weight: "10%", pass: true }
+      ],
+      edits: [
+        { rule: "Optimised for Sound Off", fix: "Add burned-in subtitles or text supers for sound-off mobile feed browsing." },
+        { rule: "CTA in Creative", fix: "Add an explicit on-screen visual CTA banner ('Try Tedhe Medhe Today') in the final 3 seconds." }
+      ],
+      escalation: "Campaign launch blocked. Score is 80% (Threshold: 90%). Creative requires subtitle overlay & CTA end-card before go-live approval."
+    },
+    aashirvaad: {
+      filename: "Aashirvaad_Atta_Facebook_Feed.jpg",
+      filesize: "6.2 MB • 1080x1080",
+      format: "JPG",
+      icon: "🌾",
+      logo: brandLogos["Aashirvaad"],
+      brand: "Aashirvaad",
+      subBrand: "Atta",
+      platform: "Meta / Facebook Feed (Static)",
+      formatType: "Static Image",
+      visualTags: [
+        { label: "Aashirvaad Logo Present", conf: "99.9%" },
+        { label: "1:1 Square Framing", conf: "100%" },
+        { label: "Typography: 7 Words", conf: "98.1%" }
+      ],
+      rules: [
+        { name: "Early Branding", req: "Logo/Product visual anywhere in frame", finding: "Aashirvaad logo and 10kg pack prominent", weight: "33.33%", pass: true },
+        { name: "Aspect Ratio / Frame", req: "1:1 Square or 4:5 Vertical", finding: "1:1 (1080x1080 px)", weight: "33.33%", pass: true },
+        { name: "Simple Message", req: "<= 10 words per frame", finding: "Headline consists of 7 clear words", weight: "33.34%", pass: true }
+      ],
+      edits: [],
+      escalation: "None required. Perfect static creative score."
+    },
+    yippee: {
+      filename: "YiPPee_Brand_Guidelines.pdf",
+      filesize: "14 MB • 12 Pages",
+      format: "PDF",
+      icon: "📄",
+      logo: brandLogos["YiPPee!"],
+      brand: "YiPPee!",
+      subBrand: "Noodles",
+      platform: "Internal Document",
+      formatType: "Document",
+      visualTags: [
+        { label: "Vector Palette Specs", conf: "99%" },
+        { label: "Logo Clearspaces", conf: "98%" }
+      ],
+      rules: [
+        { name: "Brand Book Compliance", req: "Valid ITC Design Guidelines", finding: "Official typography & vector palettes verified", weight: "100%", pass: true }
+      ],
+      edits: [],
+      escalation: "Internal guideline document."
+    }
+  };
+
+  let currentPresetKey = null;
+
+  function triggerPreset(key) {
+    currentPresetKey = key;
+    const data = presetAudits[key];
+    const scanBox = document.getElementById('scan-box');
+    const aiResults = document.getElementById('ai-results');
+    const progressBar = document.getElementById('progress-bar');
+    const stepDetail = document.getElementById('scan-step-detail');
+    const percentText = document.getElementById('scan-percentage');
+
+    aiResults.style.display = 'none';
+    scanBox.style.display = 'block';
+    progressBar.style.width = '0%';
+
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 25;
+      progressBar.style.width = progress + '%';
+      percentText.innerText = progress + '%';
+
+      if(progress === 25) stepDetail.innerText = "Extracting video frames and measuring branding timestamps...";
+      if(progress === 50) stepDetail.innerText = "Parsing audio track for brand mentions & voiceovers...";
+      if(progress === 75) stepDetail.innerText = "Checking aspect ratios and calculating Creative Quality Score (CQS)...";
+
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          scanBox.style.display = 'none';
+          displayCqsReport(data);
+        }, 300);
+      }
+    }, 120);
+  }
+
+  function displayCqsReport(data) {
+    document.getElementById('preview-icon').outerHTML = data.logo
+      ? `<img id="preview-icon" class="asset-preview-logo" src="${data.logo}" alt="logo">`
+      : `<span id="preview-icon">${data.icon}</span>`;
+    document.getElementById('preview-format').innerText = data.format;
+    document.getElementById('res-filename').innerText = data.filename;
+    document.getElementById('res-filesize').innerText = data.filesize;
+    document.getElementById('res-platform-tag').innerText = data.platform;
+
+    // Visual Tags
+    document.getElementById('res-visual-tags').innerHTML = data.visualTags.map(t =>
+      `<span class="tag tag-ai">${t.label} <span class="tag-confidence">${t.conf}</span></span>`
+    ).join('');
+
+    // Calculate CQS Score
+    let totalScore = 0;
+    data.rules.forEach(r => {
+      if (r.pass) totalScore += parseFloat(r.weight);
+    });
+    totalScore = Math.min(100, Math.round(totalScore));
+
+    let status = "EXCELLENT";
+    let statusClass = "cqs-excellent";
+    let statusIcon = "🟢";
+    let statusLabel = "EXCELLENT (Passed)";
+
+    if (totalScore < 70) {
+      status = "OFF TRACK";
+      statusClass = "cqs-failed";
+      statusIcon = "🔴";
+      statusLabel = "OFF TRACK (Failed)";
+    } else if (totalScore < 90) {
+      status = "NEEDS WORK";
+      statusClass = "cqs-needs-work";
+      statusIcon = "🟡";
+      statusLabel = "NEEDS WORK (On Track)";
+    }
+
+    data.calculatedCqs = totalScore;
+    data.cqsClassification = status;
+
+    // Build Adjudication Report HTML
+    const reportHtml = `
+      <div class="cqs-header-bar">
+        <div>
+          <h3 style="color: var(--primary); font-size: 15px;">📊 ITC LIMITED — DIGITAL CREATIVE COMPLIANCE REPORT</h3>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+            <strong>Brand:</strong> ${data.brand} | <strong>Platform & Placement:</strong> ${data.platform} | <strong>Format:</strong> ${data.formatType}
+          </div>
+        </div>
+        <div class="cqs-score-pill ${statusClass}">
+          ${statusIcon} CQS: ${totalScore}% — ${statusLabel}
+        </div>
+      </div>
+
+      <div style="font-weight: 600; font-size: 13px; margin-bottom: 6px; color: var(--primary);">📋 Adjudication Rule Checklist</div>
+      <table class="cqs-table">
+        <thead>
+          <tr>
+            <th>Rule Name</th>
+            <th>Guideline Requirement</th>
+            <th>Asset Visual / Audio Finding</th>
+            <th>Score Weight</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${data.rules.map(r => `
+            <tr>
+              <td><strong>${r.name}</strong></td>
+              <td>${r.req}</td>
+              <td>${r.finding}</td>
+              <td>${r.weight}</td>
+              <td>${r.pass ? '<span style="color: #16a34a; font-weight: bold;">✅ PASS</span>' : '<span style="color: #dc2626; font-weight: bold;">❌ FAIL</span>'}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+
+      ${data.edits.length > 0 ? `
+        <div style="margin-top: 14px; background: #fffbeb; border: 1px solid #fef08a; padding: 12px; border-radius: 6px;">
+          <div style="font-weight: 700; color: #854d0e; margin-bottom: 4px;">💡 Actionable Edits Required (To achieve >=90% Benchmark):</div>
+          <ol style="margin-left: 20px; font-size: 12px; color: #713f12;">
+            ${data.edits.map(e => `<li><strong>${e.rule}:</strong> ${e.fix}</li>`).join('')}
+          </ol>
+        </div>
+      ` : ''}
+
+      <div style="margin-top: 12px; font-size: 12px; color: #475569; background: #f8fafc; padding: 10px; border-radius: 6px; border: 1px solid #e2e8f0;">
+        <strong>📝 Escalation & Agency Note:</strong> ${data.escalation}
+      </div>
+    `;
+
+    document.getElementById('cqs-report-container').innerHTML = reportHtml;
+    document.getElementById('ai-results').style.display = 'grid';
+
+    // Handle Push Button state
+    const pushBtn = document.getElementById('btn-push-library');
+    if (totalScore >= 90) {
+      pushBtn.innerText = "Approve & Push to Asset Library";
+      pushBtn.className = "btn btn-accent";
+    } else {
+      pushBtn.innerText = "Push as 'Pending Review' (Requires Fix)";
+      pushBtn.className = "btn btn-primary";
+    }
+  }
+
+  function saveToLibrary() {
+    if(!currentPresetKey) return;
+    const current = presetAudits[currentPresetKey];
+
+    const newAsset = {
+      id: "ITC-00" + (sampleAssets.length + 1),
+      title: current.filename.replace(/_/g, ' ').replace(/\.[^/.]+$/, ""),
+      brand: current.brand,
+      subBrand: current.subBrand || "",
+      type: current.formatType === 'Video' ? 'Video' : (current.format === 'PDF' ? 'Document' : 'Image'),
+      icon: current.icon,
+      logo: current.logo,
+      format: current.format,
+      resolution: current.filesize.split('• ')[1] || "HD",
+      sku: "Campaign Ingest SKU",
+      campaign: "Digital Adjudication 2026",
+      status: current.calculatedCqs >= 90 ? "Approved" : "Pending Review",
+      cqs: current.calculatedCqs || 100,
+      cqsStatus: current.cqsClassification || "EXCELLENT",
+      expiry: "2026-12-31",
+      aiTags: current.visualTags.map(v => v.label),
+      manualTags: ["Audited by CQS Agent"]
+    };
+
+    sampleAssets.unshift(newAsset);
+    renderGallery();
+    alert(`Asset successfully ingested with CQS ${newAsset.cqs}%!`);
+    switchTab('tab-gallery');
+    document.querySelectorAll('.nav-tab')[1].classList.add('active');
+    document.querySelectorAll('.nav-tab')[0].classList.remove('active');
+  }
+
+  function renderGallery() {
+    const container = document.getElementById('gallery-container');
+    document.getElementById('asset-count').innerText = sampleAssets.length;
+
+    container.innerHTML = sampleAssets.map((item, idx) => {
+      let badgeColor = "status-approved";
+      if (item.cqsStatus === "NEEDS WORK") badgeColor = "status-pending";
+      if (item.cqsStatus === "OFF TRACK") badgeColor = "status-rejected";
+
+      return `
+        <div class="gallery-card" onclick="openEditModal(${idx})">
+          <div class="gallery-thumb">
+            ${brandLogoMarkup(item)}
+            <span class="format-badge" style="position: absolute; bottom: 8px; right: 8px; top: auto;">${item.format}</span>
+          </div>
+          <div class="gallery-info">
+            <div class="gallery-brand">${item.brand} ${item.subBrand ? '• ' + item.subBrand : ''}</div>
+            <div class="gallery-title">${item.title}</div>
+            <div style="margin-top: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <span class="status-badge ${badgeColor}">CQS: ${item.cqs}%</span>
+              <span class="status-badge ${item.status === 'Approved' ? 'status-approved' : 'status-pending'}">${item.status}</span>
+            </div>
+            <div class="gallery-meta">
+              <span>Expiry: ${item.expiry}</span>
+              <span>${item.type}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function filterAssets() {
+    const search = document.getElementById('search-input').value.toLowerCase();
+    const brand = document.getElementById('filter-brand').value;
+    const cqsFilter = document.getElementById('filter-cqs').value;
+
+    const cards = document.querySelectorAll('.gallery-card');
+    sampleAssets.forEach((item, idx) => {
+      const matchSearch = item.title.toLowerCase().includes(search) || item.brand.toLowerCase().includes(search) || item.aiTags.some(t => t.toLowerCase().includes(search));
+      const matchBrand = !brand || item.brand === brand;
+      const matchCqs = !cqsFilter || item.cqsStatus === cqsFilter;
+
+      if(cards[idx]) {
+        cards[idx].style.display = (matchSearch && matchBrand && matchCqs) ? 'block' : 'none';
+      }
+    });
+  }
+
+  function openEditModal(idx) {
+    activeEditingIndex = idx;
+    const item = sampleAssets[idx];
+
+    document.getElementById('modal-asset-title').innerText = item.title;
+    document.getElementById('modal-asset-id').innerText = `ID: ${item.id} • ${item.resolution}`;
+    document.getElementById('modal-media-preview').innerHTML = brandLogoMarkup(item, 'asset-preview-logo');
+
+    let pillClass = item.cqs >= 90 ? 'cqs-excellent' : (item.cqs >= 70 ? 'cqs-needs-work' : 'cqs-failed');
+    document.getElementById('modal-cqs-pill').innerHTML = `<span class="cqs-score-pill ${pillClass}">CQS ${item.cqs}% (${item.cqsStatus})</span>`;
+    document.getElementById('modal-ai-tags').innerHTML = item.aiTags.map(t => `<span class="tag tag-ai">${t}</span>`).join('');
+
+    document.getElementById('form-mother-brand').value = item.brand;
+    document.getElementById('form-sub-brand').value = item.subBrand || '';
+    document.getElementById('form-sku').value = item.sku || '';
+    document.getElementById('form-campaign').value = item.campaign || '';
+    document.getElementById('form-expiry').value = item.expiry || '';
+    document.getElementById('form-status').value = item.status || 'Approved';
+    document.getElementById('form-manual-tags').value = item.manualTags.join(', ');
+
+    document.getElementById('edit-modal').classList.add('active');
+  }
+
+  function closeModal() {
+    document.getElementById('edit-modal').classList.remove('active');
+  }
+
+  function saveMetadata(e) {
+    e.preventDefault();
+    if(activeEditingIndex === null) return;
+
+    const item = sampleAssets[activeEditingIndex];
+    item.brand = document.getElementById('form-mother-brand').value;
+    item.subBrand = document.getElementById('form-sub-brand').value;
+    item.sku = document.getElementById('form-sku').value;
+    item.campaign = document.getElementById('form-campaign').value;
+    item.expiry = document.getElementById('form-expiry').value;
+    item.status = document.getElementById('form-status').value;
+    item.manualTags = document.getElementById('form-manual-tags').value.split(',').map(s => s.trim()).filter(Boolean);
+
+    renderGallery();
+    closeModal();
+  }
+
+  function renderTaxonomy() {
+    const treeBox = document.getElementById('taxonomy-tree');
+    treeBox.innerHTML = taxonomyData.map(cat => `
+      <div style="margin-bottom: 16px;">
+        <div style="font-weight: 700; color: var(--primary); font-size: 14px; background: #e2e8f0; padding: 8px 12px; border-radius: 6px;">
+          📂 ${cat.category}
+        </div>
+        <div class="tree-node">
+          ${cat.brands.map(b => `
+            <div style="margin-bottom: 8px;">
+              <div class="tree-title">${brandLogoMarkup({ brand: b.name, icon: "🏷️" }, "taxonomy-brand-logo")}<span>${b.name}</span></div>
+              <div style="margin-left: 16px;">
+                ${b.variants.map(v => `<div class="tree-leaf"><span>• ${v}</span> <span style="font-size: 11px; color: var(--text-muted);">Standard Governed SKU</span></div>`).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function switchTab(tabId, ev) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    if(ev) ev.target.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  window.onload = function() {
+    renderGallery();
+    renderTaxonomy();
+    if (sessionStorage.getItem('itc_dam_auth') === 'true') {
+      showDashboard(sessionStorage.getItem('itc_dam_user') || 'Admin');
+    }
+  };
+</script>
+</body>
+</html>
