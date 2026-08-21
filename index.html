@@ -58,7 +58,6 @@
   .btn-block { width: 100%; padding: 12px; font-size: 14px; font-weight: 600; border-radius: 6px; background: var(--primary); color: white; border: none; cursor: pointer; margin-top: 10px; }
   .btn-block:hover { background: var(--primary-dark); }
   .login-error { background: #fee2e2; border: 1px solid #f87171; color: #b91c1c; font-size: 12px; padding: 8px; border-radius: 6px; margin-bottom: 16px; display: none; }
-  .demo-creds { margin-top: 20px; padding: 12px; background: #f8fafc; border: 1px dashed var(--border); border-radius: 6px; font-size: 11px; color: var(--text-muted); }
 
   /* DAM App */
   #dam-portal { display: none; }
@@ -212,12 +211,6 @@
       </div>
       <button type="submit" class="btn-block">Sign In</button>
     </form>
-
-    <div class="demo-creds">
-      <strong>Demo Credentials:</strong><br>
-      Username: <code>admin</code> | Password: <code>itcfoods2026</code><br>
-      <em>(Accepts any corporate email / credentials)</em>
-    </div>
   </div>
 </div>
 
@@ -794,7 +787,7 @@
 
   // --- EVALUATE COMPLIANCE RULES ---
   function evaluateRealCompliance(info) {
-    const { width, height, duration, platform, brand } = info;
+    const { width, height, duration, platform } = info;
     const isPortrait = height > width;
     const isLandscape = width > height;
     const isSquare = Math.abs(width - height) < 50;
